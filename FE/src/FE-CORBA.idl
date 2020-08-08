@@ -1,0 +1,21 @@
+module FE_CORBA
+{
+
+    interface GameServer {
+
+        string createPlayerAccount (in string FirstName, in string LastName, in float Age, in string Username, in string Password, in string IPAddress);
+
+        string playerSignIn (in string Username, in string Password, in string IPAddress);
+
+        string playerSignOut (in string Username, in string IPAddress);
+
+        string getPlayerStatus (in string AdminUsername, in string AdminPassword, in string IPAddress, in boolean checkOtherServers);
+
+        string transferAccount (in string Username, in string Password, in string OldIPAddress, in string NewIPAddress);
+
+        string suspendAccount (in string AdminUsername, in string AdminPassword, in string AdminIP, in string UsernameToSuspend);
+
+     };
+
+};
+
