@@ -22,8 +22,8 @@ public class ReplicaManager {
     public static void main(String[] args) {
 
         startReplica1(args);
-        startReplica2(args);
-        startReplica3(args);
+       // startReplica2(args);
+        //startReplica3(args);
 
     }
 

@@ -203,8 +203,8 @@ public class R1_EuropeanServerImpl extends GameServerPOA {
 
         //Send UDP requests to other servers
         if (checkOtherServers) {
-            response_Asia = generateUDPResponse(Constants.SERVER_PORT_ASIA,"playerstatus");
-            response_America = generateUDPResponse(Constants.SERVER_PORT_AMERICA,"playerstatus");
+            response_Asia = generateUDPResponse(Constants.SERVER_PORT_ASIA,"6");
+            response_America = generateUDPResponse(Constants.SERVER_PORT_AMERICA,"6");
         }
 
         //append the results
@@ -234,9 +234,9 @@ public class R1_EuropeanServerImpl extends GameServerPOA {
                     if (currPlayer.getUserName().equalsIgnoreCase(Username)) {
 
                         int newServerPort = Constants.getServerPortFromIP(Integer.parseInt(NewIPAddress));
-                        String playerInfo = currPlayer.getFirstName() + "," + currPlayer.getLastName() + "," + currPlayer.getAge() + "," + currPlayer.getUserName() + "," + currPlayer.getPassword();
+                        String playerInfo = currPlayer.getFirstName() + ":" + currPlayer.getLastName() + ":" + currPlayer.getAge() + ":" + currPlayer.getUserName() + ":" + currPlayer.getPassword();
 
-                        String response = generateUDPResponse(newServerPort,"transferPlayer:" + playerInfo);
+                        String response = generateUDPResponse(newServerPort,"1:" + playerInfo);
 
                         if (response.equalsIgnoreCase("Successful")) {
 
@@ -349,8 +349,8 @@ public class R1_EuropeanServerImpl extends GameServerPOA {
     private boolean checkUserName(String userName) {
         SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
 
-        String check_american = sendReceiveUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_AMERICA, Constants.SERVER_PORT_EUROPE);
-        String check_asia = sendReceiveUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_EUROPE);
+        String check_american = sendReceiveUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_AMERICA, Constants.SERVER_PORT_EUROPE);
+        String check_asia = sendReceiveUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_EUROPE);
 
         return !check_american.equalsIgnoreCase("User not found") || !check_asia.equalsIgnoreCase("User not found");
     }
