@@ -1,4 +1,4 @@
-package main.Constants;
+package FE.src.main.Constants;
 
 /**
  * The type Validations.

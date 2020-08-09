@@ -1,4 +1,4 @@
-package main.Model;
+package FE.src.main.Model;
 
 import java.io.Serializable;
 

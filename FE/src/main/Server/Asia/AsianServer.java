@@ -1,7 +1,7 @@
-package main.Server.Asia;
+package FE.src.main.Server.Asia;
 
-import DPSS_CORBA.GameServer;
-import DPSS_CORBA.GameServerHelper;
+import FE_CORBA.GameServer;
+import FE_CORBA.GameServerHelper;
 import main.Constants.Constants;
 import main.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;

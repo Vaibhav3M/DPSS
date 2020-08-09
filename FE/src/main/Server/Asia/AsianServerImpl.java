@@ -1,6 +1,6 @@
-package main.Server.Asia;
+package FE.src.main.Server.Asia;
 
-import DPSS_CORBA.GameServerPOA;
+import FE_CORBA.GameServerPOA;
 import main.Constants.Constants;
 import main.Model.Player;
 import main.SendUDP.SendReceiveUDPMessage;

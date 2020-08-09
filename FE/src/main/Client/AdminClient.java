@@ -1,8 +1,8 @@
-package main.Client;
+package FE.src.main.Client;
 
 
-import DPSS_CORBA.GameServer;
-import DPSS_CORBA.GameServerHelper;
+import FE_CORBA.GameServer;
+import FE_CORBA.GameServerHelper;
 import main.Constants.Constants;
 import main.Constants.Validations;
 import main.Utilities.CustomLogger;

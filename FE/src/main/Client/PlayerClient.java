@@ -1,7 +1,7 @@
-package main.Client;
+package FE.src.main.Client;
 
-import DPSS_CORBA.GameServer;
-import DPSS_CORBA.GameServerHelper;
+import GameServer_CORBA.GameServer;
+import GameServer_CORBA.GameServerHelper;
 import main.Constants.Constants;
 import main.Constants.Validations;
 import main.Model.Player;

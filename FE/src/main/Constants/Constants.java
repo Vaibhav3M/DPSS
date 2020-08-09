@@ -1,4 +1,4 @@
-package main.Constants;
+package FE.src.main.Constants;
 
 public class Constants {
 

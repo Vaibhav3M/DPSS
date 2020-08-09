@@ -1,4 +1,4 @@
-package main.Utilities;
+package FE.src.main.Utilities;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;

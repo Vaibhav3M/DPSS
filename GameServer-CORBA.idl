@@ -1,4 +1,4 @@
-module FE_CORBA
+module GameServer_CORBA
 {
 
     interface GameServer {

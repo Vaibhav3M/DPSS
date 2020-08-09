@@ -1,4 +1,4 @@
-package main.SendUDP;
+package FE.src.main.SendUDP;
 
 import java.io.IOException;
 import java.net.*;

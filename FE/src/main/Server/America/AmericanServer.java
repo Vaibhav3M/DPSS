@@ -1,7 +1,5 @@
-package main.Server.America;
+package FE.src.main.Server.America;
 
-import DPSS_CORBA.GameServer;
-import DPSS_CORBA.GameServerHelper;
 import main.Constants.Constants;
 import main.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
@@ -116,7 +114,7 @@ public class AmericanServer {
             // get object reference from the servant
             org.omg.CORBA.Object ref = rootpoa.servant_to_reference(americanServer);
 
-            GameServer href = GameServerHelper.narrow(ref);
+            FE_CORBA.GameServer href = FE_CORBA.GameServerHelper.narrow(ref);
             // get the root naming context
             // NameService invokes the name service
             org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
