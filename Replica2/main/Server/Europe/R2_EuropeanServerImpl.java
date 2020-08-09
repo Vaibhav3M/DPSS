@@ -1,9 +1,9 @@
-package main.Server.Europe;
+package Replica2.main.Server.Europe;
 
-import DPSS_CORBA.GameServerPOA;
-import main.Constants.Constants;
-import main.Model.Player;
-import main.SendUDP.SendReceiveUDPMessage;
+import GameServer_CORBA.GameServerPOA;
+import Replica2.main.Constants.Constants;
+import Replica2.main.Model.Player;
+import Replica2.main.SendUDP.SendReceiveUDPMessage;
 import org.omg.CORBA.ORB;
 
 import java.util.ArrayList;

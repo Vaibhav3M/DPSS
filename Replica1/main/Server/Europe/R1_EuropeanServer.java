@@ -1,9 +1,9 @@
-package main.Server.Europe;
+package Replica1.main.Server.Europe;
 
-import DPSS_CORBA.GameServer;
-import DPSS_CORBA.GameServerHelper;
-import main.Constants.Constants;
-import main.Utilities.CustomLogger;
+import GameServer_CORBA.GameServer;
+import GameServer_CORBA.GameServerHelper;
+import Replica1.main.Constants.Constants;
+import Replica1.main.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;

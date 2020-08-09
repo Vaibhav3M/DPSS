@@ -1,11 +1,11 @@
 package FE.src.main.Client;
 
 
-import FE_CORBA.GameServer;
-import FE_CORBA.GameServerHelper;
-import main.Constants.Constants;
-import main.Constants.Validations;
-import main.Utilities.CustomLogger;
+import GameServer_CORBA.GameServer;
+import GameServer_CORBA.GameServerHelper;
+import FE.src.main.Constants.Constants;
+import FE.src.main.Constants.Validations;
+import FE.src.main.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;

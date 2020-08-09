@@ -1,9 +1,9 @@
-package main.Server.America;
+package Replica2.main.Server.Asia;
 
-import DPSS_CORBA.GameServer;
-import DPSS_CORBA.GameServerHelper;
-import main.Constants.Constants;
-import main.Utilities.CustomLogger;
+import GameServer_CORBA.GameServer;
+import GameServer_CORBA.GameServerHelper;
+import Replica2.main.Constants.Constants;
+import Replica2.main.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
@@ -19,7 +19,7 @@ import java.net.SocketException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-public class AmericanServer {
+public class AsianServer {
 
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -31,17 +31,17 @@ public class AmericanServer {
      *
      * @param serverImpl the server
      */
-    public static void recieve(AmericanServerImpl serverImpl) {
+    public static void recieve(AsianServerImpl serverImpl) {
 
         String responseString = "";
         DatagramSocket dataSocket = null;
 
         try {
 
-            dataSocket = new DatagramSocket(Constants.SERVER_PORT_AMERICA);
+            dataSocket = new DatagramSocket(Constants.SERVER_PORT_ASIA);
             byte[] buffer = new byte[1000];
             LOGGER.info( "Server started..!!!");
-
+            System.out.println(Constants.SERVER_NAME_ASIA + " started at port " + Constants.SERVER_PORT_ASIA);
             while (true) {
                 DatagramPacket request = new DatagramPacket(buffer, buffer.length);
                 dataSocket.receive(request);
@@ -55,13 +55,12 @@ public class AmericanServer {
                 if (requestMessage.split("=")[0].equalsIgnoreCase("username")) {
                     responseString = serverImpl.playerSignOut(requestMessage.split("=")[1],request_IP);
                 }else if (requestMessage.equalsIgnoreCase("transferPlayer")){
-
+                    System.out.println(requestMessage);
                     String playerString = new String(request.getData(),0,request.getLength()).split(":")[2];
                     String[] playerArray = playerString.split(",");
 
-                    responseString = serverImpl.createPlayerAccount(playerArray[0],playerArray[1],Integer.parseInt(playerArray[2]),playerArray[3],playerArray[4],String.valueOf(Constants.SERVER_IP_ASIA));
-
-                }else {
+                    responseString = serverImpl.createPlayerAccount(playerArray[0],playerArray[1],Integer.parseInt(playerArray[2]),playerArray[3],playerArray[4],String.valueOf(Constants.SERVER_IP_AMERICA));
+                } else {
                     responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
                 }
 
@@ -84,15 +83,14 @@ public class AmericanServer {
 
     public static void main(String args[]) {
 
-        AmericanServerImpl americanServer = new AmericanServerImpl(LOGGER);
-
-        Thread server_america = new Thread(()->
+        AsianServerImpl serverImplementation = new AsianServerImpl(LOGGER);
+        Thread server_asia = new Thread(()->
         {
             try {
                 //setup logger
                 setupLogging();
                 //UDP setup
-                recieve(americanServer);
+                recieve(serverImplementation);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,21 +98,21 @@ public class AmericanServer {
             }
         });
 
-        server_america.setName("thread_America_server");
-        server_america.start();
+        server_asia.setName("thread_Asia_server");
+        server_asia.start();
 
         // create and initialize the ORB
         ORB orb = ORB.init(args, null);
         try {
+
             // get reference to rootpoa & activate the POAManager
             POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootpoa.the_POAManager().activate();
-
             // create servant and register it with the ORB
-            americanServer.setORB(orb);
+            serverImplementation.setORB(orb);
 
             // get object reference from the servant
-            org.omg.CORBA.Object ref = rootpoa.servant_to_reference(americanServer);
+            org.omg.CORBA.Object ref = rootpoa.servant_to_reference(serverImplementation);
 
             GameServer href = GameServerHelper.narrow(ref);
             // get the root naming context
@@ -124,9 +122,10 @@ public class AmericanServer {
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
             // bind the Object Reference in Naming
-            NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_AMERICA);
+            NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_ASIA);
             ncRef.rebind(path, href);
-            System.out.println("AmericanServer ready and waiting ...");
+            System.out.println("AsianServer ready and waiting ...");
+
             // wait for invocations from clients
             orb.run();
         } catch (Exception e) {
@@ -134,20 +133,19 @@ public class AmericanServer {
             e.printStackTrace(System.out);
         }
         orb.shutdown(false);
-        System.out.println("AmericanServer Exiting ...");
+        System.out.println("AsianServer Exiting ...");
     }
 
-    /**stat
+    /**
      * setupLogging. - Setup logger for the class
      */
     private static void setupLogging() throws IOException {
         File files = new File(Constants.SERVER_LOG_DIRECTORY);
         if (!files.exists())
             files.mkdirs();
-        files = new File(Constants.SERVER_LOG_DIRECTORY+"AMERICA_Server.log");
+        files = new File(Constants.SERVER_LOG_DIRECTORY+"ASIA_Server.log");
         if(!files.exists())
             files.createNewFile();
         fileHandler = CustomLogger.setup(files.getAbsolutePath());
     }
 }
-

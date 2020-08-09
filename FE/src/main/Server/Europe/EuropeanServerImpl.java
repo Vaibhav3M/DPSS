@@ -1,9 +1,9 @@
 package FE.src.main.Server.Europe;
 
-import FE_CORBA.GameServerPOA;
-import main.Constants.Constants;
-import main.Model.Player;
-import main.SendUDP.SendReceiveUDPMessage;
+import GameServer_CORBA.GameServerPOA;
+import FE.src.main.Constants.Constants;
+import FE.src.main.Model.Player;
+import FE.src.main.SendUDP.SendReceiveUDPMessage;
 import org.omg.CORBA.ORB;
 
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 public class EuropeanServerImpl extends GameServerPOA {
+
+    boolean isLeader = false;
 
     private ORB orb;
     private static final long serialVersionUID = 7526472295622776147L;

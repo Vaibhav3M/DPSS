@@ -1,9 +1,9 @@
 package FE.src.main.Server.Asia;
 
-import FE_CORBA.GameServerPOA;
-import main.Constants.Constants;
-import main.Model.Player;
-import main.SendUDP.SendReceiveUDPMessage;
+import GameServer_CORBA.GameServerPOA;
+import FE.src.main.Constants.Constants;
+import FE.src.main.Model.Player;
+import FE.src.main.SendUDP.SendReceiveUDPMessage;
 import org.omg.CORBA.ORB;
 
 import java.util.ArrayList;
