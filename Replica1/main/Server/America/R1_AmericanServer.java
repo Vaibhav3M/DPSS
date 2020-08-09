@@ -4,7 +4,6 @@ import GameServer_CORBA.GameServer;
 import GameServer_CORBA.GameServerHelper;
 import Replica1.main.Constants.Constants;
 import Replica1.main.Utilities.CustomLogger;
-import Replica1.main.Server.America.AmericanServerImpl;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
@@ -20,7 +19,7 @@ import java.net.SocketException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-public class AmericanServer {
+public class R1_AmericanServer {
 
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -32,7 +31,7 @@ public class AmericanServer {
      *
      * @param serverImpl the server
      */
-    public static void recieve(AmericanServerImpl serverImpl) {
+    public static void recieve(R1_AmericanServerImpl serverImpl) {
 
         String responseString = "";
         DatagramSocket dataSocket = null;
@@ -85,7 +84,7 @@ public class AmericanServer {
 
     public static void main(String args[]) {
 
-        AmericanServerImpl americanServer = new AmericanServerImpl(LOGGER);
+        R1_AmericanServerImpl americanServer = new R1_AmericanServerImpl(LOGGER);
 
         Thread server_america = new Thread(()->
         {

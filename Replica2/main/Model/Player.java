@@ -1,4 +1,4 @@
-package main.Model;
+package Replica2.main.Model;
 
 import java.io.Serializable;
 

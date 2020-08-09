@@ -12,7 +12,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
-public class AmericanServerImpl extends GameServerPOA {
+public class R2_AmericanServerImpl extends GameServerPOA {
 
     private ORB orb;
     private static final long serialVersionUID = 7526472295622776147L;
@@ -24,7 +24,7 @@ public class AmericanServerImpl extends GameServerPOA {
     //to log activities in a log file
     private static Logger LOGGER;
 
-    protected AmericanServerImpl(Logger logger) {
+    protected R2_AmericanServerImpl(Logger logger) {
         super();
         LOGGER = logger;
         addDummyData();

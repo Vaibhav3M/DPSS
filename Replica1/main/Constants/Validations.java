@@ -1,4 +1,4 @@
-package main.Constants;
+package Replica1.main.Constants;
 
 /**
  * The type Validations.

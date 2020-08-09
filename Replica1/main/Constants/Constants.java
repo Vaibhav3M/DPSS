@@ -1,11 +1,11 @@
-package main.Constants;
+package Replica1.main.Constants;
 
 public class Constants {
 
     /* Game server ports */
-    public static final int SERVER_PORT_AMERICA = 2421;
-    public static final int SERVER_PORT_EUROPE = 5892;
-    public static final int SERVER_PORT_ASIA = 8091;
+    public static final int SERVER_PORT_AMERICA = 2001;
+    public static final int SERVER_PORT_EUROPE = 2002;
+    public static final int SERVER_PORT_ASIA = 2003;
 
     /* Game server IPs */
     public static final int SERVER_IP_AMERICA = 132;
@@ -13,9 +13,9 @@ public class Constants {
     public static final int SERVER_IP_ASIA = 182;
 
     /* Game server names */
-    public static final String SERVER_NAME_AMERICA = "AmericaGameServer";
-    public static final String SERVER_NAME_EUROPE = "EuropeGameServer";
-    public static final String SERVER_NAME_ASIA = "AsiaGameServer";
+    public static final String SERVER_NAME_AMERICA = "R1_AmericaGameServer";
+    public static final String SERVER_NAME_EUROPE = "R1_EuropeGameServer";
+    public static final String SERVER_NAME_ASIA = "R1_AsiaGameServer";
 
     /* Log storage locations */
     public static final String SERVER_LOG_DIRECTORY = "./src/Logs/Server/";

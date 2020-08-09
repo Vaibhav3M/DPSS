@@ -2,7 +2,6 @@ package Replica1.main.Server.Asia;
 
 import GameServer_CORBA.GameServer;
 import GameServer_CORBA.GameServerHelper;
-import Replica1.main.Server.Asia.AsianServerImpl;
 import Replica1.main.Constants.Constants;
 import Replica1.main.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
@@ -20,7 +19,7 @@ import java.net.SocketException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-public class AsianServer {
+public class R1_AsianServer {
 
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -32,7 +31,7 @@ public class AsianServer {
      *
      * @param serverImpl the server
      */
-    public static void recieve(AsianServerImpl serverImpl) {
+    public static void recieve(R1_AsianServerImpl serverImpl) {
 
         String responseString = "";
         DatagramSocket dataSocket = null;
@@ -84,7 +83,7 @@ public class AsianServer {
 
     public static void main(String args[]) {
 
-        AsianServerImpl serverImplementation = new AsianServerImpl(LOGGER);
+        R1_AsianServerImpl serverImplementation = new R1_AsianServerImpl(LOGGER);
         Thread server_asia = new Thread(()->
         {
             try {

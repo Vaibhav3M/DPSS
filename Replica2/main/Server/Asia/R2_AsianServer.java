@@ -19,7 +19,7 @@ import java.net.SocketException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-public class AsianServer {
+public class R2_AsianServer {
 
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -31,7 +31,7 @@ public class AsianServer {
      *
      * @param serverImpl the server
      */
-    public static void recieve(AsianServerImpl serverImpl) {
+    public static void recieve(R2_AsianServerImpl serverImpl) {
 
         String responseString = "";
         DatagramSocket dataSocket = null;
@@ -83,7 +83,7 @@ public class AsianServer {
 
     public static void main(String args[]) {
 
-        AsianServerImpl serverImplementation = new AsianServerImpl(LOGGER);
+        R2_AsianServerImpl serverImplementation = new R2_AsianServerImpl(LOGGER);
         Thread server_asia = new Thread(()->
         {
             try {
