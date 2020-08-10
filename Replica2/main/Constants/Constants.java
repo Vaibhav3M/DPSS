@@ -7,6 +7,14 @@ public class Constants {
     public static final int SERVER_PORT_EUROPE = 3002;
     public static final int SERVER_PORT_ASIA = 3003;
 
+    public static final int L_SERVER_PORT_AMERICA = 2421;
+    public static final int L_SERVER_PORT_EUROPE = 5892;
+    public static final int L_SERVER_PORT_ASIA = 8091;
+
+    public static final int R1_SERVER_PORT_AMERICA = 2001;
+    public static final int R1_SERVER_PORT_EUROPE = 2002;
+    public static final int R1_SERVER_PORT_ASIA = 2003;
+
     /* Game server IPs */
     public static final int SERVER_IP_AMERICA = 132;
     public static final int SERVER_IP_EUROPE = 93;

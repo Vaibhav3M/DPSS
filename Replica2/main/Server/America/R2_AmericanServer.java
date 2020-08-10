@@ -27,7 +27,7 @@ public class R2_AmericanServer {
     static FileHandler fileHandler = null;
 
     /**
-     *Recieve - Setup UDP server to recieve requests.
+     * Recieve - Setup UDP server to recieve requests.
      *
      * @param serverImpl the server
      */
@@ -40,30 +40,59 @@ public class R2_AmericanServer {
 
             dataSocket = new DatagramSocket(Constants.SERVER_PORT_AMERICA);
             byte[] buffer = new byte[1000];
-            LOGGER.info( "Server started..!!!");
+            LOGGER.info("Server started..!!!");
 
             while (true) {
                 DatagramPacket request = new DatagramPacket(buffer, buffer.length);
                 dataSocket.receive(request);
-                String requestMessage = new String(request.getData(),0,request.getLength());
+                String requestMessage = new String(request.getData(), 0, request.getLength());
 
                 LOGGER.info("Received UDP request message: " + requestMessage);
 
-                String request_IP = requestMessage.split(":")[0];
-                requestMessage = requestMessage.split(":")[1];
+                String[] data = requestMessage.split(":");
+                String request_IP = data[0];
 
-                if (requestMessage.split("=")[0].equalsIgnoreCase("username")) {
-                    responseString = serverImpl.playerSignOut(requestMessage.split("=")[1],request_IP);
-                }else if (requestMessage.equalsIgnoreCase("transferPlayer")){
+                switch (data[1].trim()) {
 
-                    String playerString = new String(request.getData(),0,request.getLength()).split(":")[2];
-                    String[] playerArray = playerString.split(",");
+                    case "1":
+                        responseString = serverImpl.createPlayerAccount(data[2], data[3], Integer.parseInt(data[4]), data[5], data[6], String.valueOf(Constants.SERVER_IP_AMERICA));
+                        break;
+                    case "2":
+                        responseString = serverImpl.playerSignIn(data[2], data[3], data[4]);
+                        break;
+                    case "3":
+                        responseString = serverImpl.playerSignOut(data[2], request_IP);
+                        break;
+                    case "4":
+                        responseString = serverImpl.suspendAccount(data[2], data[3], data[4], data[5]);
+                        break;
+                    case "5":
+                        responseString = serverImpl.transferAccount(data[2], data[3], data[4], data[5]);
+                        break;
+                    case "6":
+                        responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
+                        break;
+                    case "7":
+                        responseString = serverImpl.createPlayerAccount(data[2], data[3], Integer.parseInt(data[4]), data[5], data[6], "1212"); //here IP address to to just check server
+                        break;
 
-                    responseString = serverImpl.createPlayerAccount(playerArray[0],playerArray[1],Integer.parseInt(playerArray[2]),playerArray[3],playerArray[4],String.valueOf(Constants.SERVER_IP_ASIA));
-
-                }else {
-                    responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
                 }
+
+//                String request_IP = requestMessage.split(":")[0];
+//                requestMessage = requestMessage.split(":")[1];
+//
+//                if (requestMessage.split("=")[0].equalsIgnoreCase("username")) {
+//                    responseString = serverImpl.playerSignOut(requestMessage.split("=")[1],request_IP);
+//                }else if (requestMessage.equalsIgnoreCase("transferPlayer")){
+//
+//                    String playerString = new String(request.getData(),0,request.getLength()).split(":")[2];
+//                    String[] playerArray = playerString.split(",");
+//
+//                    responseString = serverImpl.createPlayerAccount(playerArray[0],playerArray[1],Integer.parseInt(playerArray[2]),playerArray[3],playerArray[4],String.valueOf(Constants.SERVER_IP_ASIA));
+//
+//                }else {
+//                    responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
+//                }
 
                 LOGGER.info("Sent UDP response message: " + responseString);
                 DatagramPacket reply = new DatagramPacket(responseString.getBytes(), responseString.length(), request.getAddress(), request.getPort());
@@ -72,9 +101,9 @@ public class R2_AmericanServer {
             }
 
         } catch (SocketException e) {
-            LOGGER.info("Exception at socket" +e.getLocalizedMessage());
+            LOGGER.info("Exception at socket" + e.getLocalizedMessage());
         } catch (IOException e) {
-            LOGGER.info("Exception at IO" +e.getLocalizedMessage());
+            LOGGER.info("Exception at IO" + e.getLocalizedMessage());
         } finally {
             if (dataSocket != null) dataSocket.close();
             if (fileHandler != null) fileHandler.close();
@@ -86,7 +115,7 @@ public class R2_AmericanServer {
 
         R2_AmericanServerImpl americanServer = new R2_AmericanServerImpl(LOGGER);
 
-        Thread server_america = new Thread(()->
+        Thread server_america = new Thread(() ->
         {
             try {
                 //setup logger
@@ -96,7 +125,7 @@ public class R2_AmericanServer {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Exception at main" +e.getLocalizedMessage());
+                System.out.println("Exception at main" + e.getLocalizedMessage());
             }
         });
 
@@ -137,15 +166,16 @@ public class R2_AmericanServer {
         System.out.println("AmericanServer Exiting ...");
     }
 
-    /**stat
+    /**
+     * stat
      * setupLogging. - Setup logger for the class
      */
     private static void setupLogging() throws IOException {
         File files = new File(Constants.SERVER_LOG_DIRECTORY);
         if (!files.exists())
             files.mkdirs();
-        files = new File(Constants.SERVER_LOG_DIRECTORY+"AMERICA_Server.log");
-        if(!files.exists())
+        files = new File(Constants.SERVER_LOG_DIRECTORY + "AMERICA_Server.log");
+        if (!files.exists())
             files.createNewFile();
         fileHandler = CustomLogger.setup(files.getAbsolutePath());
     }

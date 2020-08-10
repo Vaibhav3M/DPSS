@@ -61,7 +61,6 @@ public class AmericanServer {
                     case "2" : responseString = serverImpl.playerSignIn(data[2],data[3],data[4]);
                         break;
                     case "3" : responseString = serverImpl.playerSignOut(data[2],request_IP);
-                        System.out.println(responseString);
                         break;
                     case "4" : responseString = serverImpl.suspendAccount(data[2],data[3],data[4],data[5]);
                         break;

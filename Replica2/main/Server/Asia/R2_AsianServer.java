@@ -49,20 +49,42 @@ public class R2_AsianServer {
 
                 LOGGER.info("Received UDP request message: " + requestMessage);
 
-                String request_IP = requestMessage.split(":")[0];
-                requestMessage = requestMessage.split(":")[1];
+                String[] data = requestMessage.split(":");
+                String request_IP = data[0];
 
-                if (requestMessage.split("=")[0].equalsIgnoreCase("username")) {
-                    responseString = serverImpl.playerSignOut(requestMessage.split("=")[1],request_IP);
-                }else if (requestMessage.equalsIgnoreCase("transferPlayer")){
-                    System.out.println(requestMessage);
-                    String playerString = new String(request.getData(),0,request.getLength()).split(":")[2];
-                    String[] playerArray = playerString.split(",");
+                switch (data[1].trim()){
 
-                    responseString = serverImpl.createPlayerAccount(playerArray[0],playerArray[1],Integer.parseInt(playerArray[2]),playerArray[3],playerArray[4],String.valueOf(Constants.SERVER_IP_AMERICA));
-                } else {
-                    responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
+                    case "1" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],String.valueOf(Constants.SERVER_IP_ASIA));
+                        break;
+                    case "2" : responseString = serverImpl.playerSignIn(data[2],data[3],data[4]);
+                        break;
+                    case "3" : responseString = serverImpl.playerSignOut(data[2],request_IP);
+                        break;
+                    case "4" : responseString = serverImpl.suspendAccount(data[2],data[3],data[4],data[5]);
+                        break;
+                    case "5" : responseString = serverImpl.transferAccount(data[2],data[3],data[4],data[5]);
+                        break;
+                    case "6" : responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
+                        break;
+                    case "7" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],"1212"); //here IP address to to just check server
+                        break;
+
                 }
+
+//                String request_IP = requestMessage.split(":")[0];
+//                requestMessage = requestMessage.split(":")[1];
+//
+//                if (requestMessage.split("=")[0].equalsIgnoreCase("username")) {
+//                    responseString = serverImpl.playerSignOut(requestMessage.split("=")[1],request_IP);
+//                }else if (requestMessage.equalsIgnoreCase("transferPlayer")){
+//                    System.out.println(requestMessage);
+//                    String playerString = new String(request.getData(),0,request.getLength()).split(":")[2];
+//                    String[] playerArray = playerString.split(",");
+//
+//                    responseString = serverImpl.createPlayerAccount(playerArray[0],playerArray[1],Integer.parseInt(playerArray[2]),playerArray[3],playerArray[4],String.valueOf(Constants.SERVER_IP_AMERICA));
+//                } else {
+//                    responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
+//                }
 
                 LOGGER.info("Sent UDP response message: " + responseString);
                 DatagramPacket reply = new DatagramPacket(responseString.getBytes(), responseString.length(), request.getAddress(), request.getPort());

@@ -179,6 +179,7 @@ public class R2_AmericanServerImpl extends GameServerPOA {
 
     @Override
     public String getPlayerStatus(String AdminUsername, String AdminPassword, String IPAddress, boolean checkOtherServers) {
+        System.out.println("Called by UDP, status 2");
         if (!AdminUsername.equalsIgnoreCase("Admin") || !AdminPassword.equalsIgnoreCase("Admin")) {
             return "Username or password incorrect.";
         }

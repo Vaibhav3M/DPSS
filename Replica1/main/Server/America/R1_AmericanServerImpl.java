@@ -182,7 +182,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         if (!AdminUsername.equalsIgnoreCase("Admin") || !AdminPassword.equalsIgnoreCase("Admin")) {
             return "Username or password incorrect.";
         }
-
+        System.out.println("Called by UDP, status 1");
             String response = "NA: ";
             int onlineCount = 0;
             int offlineCount = 0;
