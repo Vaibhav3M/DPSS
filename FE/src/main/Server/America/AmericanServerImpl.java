@@ -46,7 +46,7 @@ public class AmericanServerImpl extends GameServerPOA {
         String response2 = "";
 
         if (isLeader) {
-            String action = "1:" + FirstName + ":" + LastName + ":" + String.valueOf(Math.round(Age)) + ":" + Username + ":" + Password;
+            String action = "1:" + FirstName + ":" + LastName + ":" + Math.round(Age) + ":" + Username + ":" + Password;
             response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
             response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
         }
@@ -63,7 +63,7 @@ public class AmericanServerImpl extends GameServerPOA {
             if (checkUserName(player.getUserName())) {
 
                 LOGGER.info("Username=" + player.getUserName() + " already existed");
-                return "Username already exists";
+                return "Username already exists 11";
             }
         }
 
@@ -84,7 +84,7 @@ public class AmericanServerImpl extends GameServerPOA {
                     if (currPlayer.getUserName().equalsIgnoreCase(player.getUserName())) {
                         LOGGER.info("Username=" + player.getUserName() + " already existed");
 
-                        return "UserName already exists";
+                        return "UserName already exists 22";
                     }
                 }
                 playerList.add(player);
@@ -292,6 +292,16 @@ public class AmericanServerImpl extends GameServerPOA {
 
         if (OldIPAddress.equalsIgnoreCase(NewIPAddress)) return "New IP and Old IP must be different";
 
+        String result = "User not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "5:" + Username  + ":" + Password + ":" + OldIPAddress + ":" + NewIPAddress;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
+
         char playerKey = Username.charAt(0);
 
         try {
@@ -318,22 +328,29 @@ public class AmericanServerImpl extends GameServerPOA {
 
                             LOGGER.info("Player " + "Username=" + Username + " has been transferred to  - " + NewIPAddress);
 
-                            return currPlayer.getUserName() + " has been transferred to - " + NewIPAddress;
+                            result = currPlayer.getUserName() + " has been transferred to - " + NewIPAddress;
                         } else {
 
-                            return currPlayer.getUserName() + " cannot be transferred.";
+                            result = currPlayer.getUserName() + " cannot be transferred.";
                         }
+                        break;
                     }
                 }
             } else {
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return "User not found";
+                result  = "User not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return "User not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+       // return "User not found";
 
     }
 
@@ -341,6 +358,16 @@ public class AmericanServerImpl extends GameServerPOA {
     public String suspendAccount(String AdminUsername, String AdminPassword, String AdminIP, String UsernameToSuspend) {
 
         LOGGER.info("Received request - Suspend Player - " + "Username=" + UsernameToSuspend);
+
+        String result = UsernameToSuspend + " not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "4:" + AdminUsername  + ":" + AdminPassword + ":" + AdminIP + ":" + UsernameToSuspend;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
 
         char playerKey = UsernameToSuspend.charAt(0);
 
@@ -359,19 +386,26 @@ public class AmericanServerImpl extends GameServerPOA {
                         playersTable.put(playerKey, playerList);
 
                         LOGGER.info("Player Suspended - " + "Username=" + UsernameToSuspend);
-                        return currPlayer.getUserName() + " has been suspended. ";
+                        result =  currPlayer.getUserName() + " has been suspended. ";
+                        break;
                     }
                 }
             } else {
 
                 LOGGER.info("Player not found - " + "Username=" + UsernameToSuspend);
-                return UsernameToSuspend + " not found";
+                result = UsernameToSuspend + " not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return UsernameToSuspend + " not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+        //return UsernameToSuspend + " not found";
     }
 
     /**
@@ -386,7 +420,7 @@ public class AmericanServerImpl extends GameServerPOA {
         String[] response = {"No response from " + serverPort};
 
         SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
-        System.out.println(action);
+        //System.out.println(action);
         //create a new thread for UDP request
         Thread UDPThread = new Thread(() ->
         {

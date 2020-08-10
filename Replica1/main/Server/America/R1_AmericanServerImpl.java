@@ -182,7 +182,6 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         if (!AdminUsername.equalsIgnoreCase("Admin") || !AdminPassword.equalsIgnoreCase("Admin")) {
             return "Username or password incorrect.";
         }
-        System.out.println("Called by UDP, status 1");
             String response = "NA: ";
             int onlineCount = 0;
             int offlineCount = 0;
@@ -237,7 +236,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
                         String response = generateUDPResponse(newServerPort,"7:" + playerInfo);
 
-                        System.out.println(response);
+                       // System.out.println(response + "R1");
                         if (response.equalsIgnoreCase("Successful")) {
 
                             playerList.remove(i);
@@ -319,6 +318,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         Thread UDPThread = new Thread(() ->
         {
             try {
+                //System.out.println(action + " " + serverPort + " ");
                 response[0] = sendReceiveUDPMessage.getUDPResponse(action, serverPort, Constants.SERVER_PORT_AMERICA);
 
             } catch (Exception e) {

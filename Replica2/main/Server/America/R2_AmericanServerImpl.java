@@ -179,7 +179,7 @@ public class R2_AmericanServerImpl extends GameServerPOA {
 
     @Override
     public String getPlayerStatus(String AdminUsername, String AdminPassword, String IPAddress, boolean checkOtherServers) {
-        System.out.println("Called by UDP, status 2");
+
         if (!AdminUsername.equalsIgnoreCase("Admin") || !AdminPassword.equalsIgnoreCase("Admin")) {
             return "Username or password incorrect.";
         }
@@ -234,11 +234,9 @@ public class R2_AmericanServerImpl extends GameServerPOA {
                     if (currPlayer.getUserName().equalsIgnoreCase(Username)) {
 
                         int newServerPort = Constants.getServerPortFromIP(Integer.parseInt(NewIPAddress));
-                        String playerInfo = currPlayer.getFirstName() + "," + currPlayer.getLastName() + "," + currPlayer.getAge() + "," + currPlayer.getUserName() + "," + currPlayer.getPassword();
+                        String playerInfo = currPlayer.getFirstName() + ":" + currPlayer.getLastName() + ":" + currPlayer.getAge() + ":" + currPlayer.getUserName() + ":" + currPlayer.getPassword();
 
-                        String response = generateUDPResponse(newServerPort,"transferPlayer:" + playerInfo);
-
-                        System.out.println(response);
+                        String response = generateUDPResponse(newServerPort,"7:" + playerInfo);
                         if (response.equalsIgnoreCase("Successful")) {
 
                             playerList.remove(i);
@@ -320,6 +318,7 @@ public class R2_AmericanServerImpl extends GameServerPOA {
         Thread UDPThread = new Thread(() ->
         {
             try {
+                //System.out.println(action + " " + serverPort + " ");
                 response[0] = sendReceiveUDPMessage.getUDPResponse(action, serverPort, Constants.SERVER_PORT_AMERICA);
 
             } catch (Exception e) {
@@ -349,8 +348,8 @@ public class R2_AmericanServerImpl extends GameServerPOA {
     private boolean checkUserName(String userName) {
         SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
 
-        String check_asia = sendReceiveUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_AMERICA);
-        String check_europe = sendReceiveUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_EUROPE, Constants.SERVER_PORT_AMERICA);
+        String check_asia = sendReceiveUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_AMERICA);
+        String check_europe = sendReceiveUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_EUROPE, Constants.SERVER_PORT_AMERICA);
 
         return !check_asia.equalsIgnoreCase("User not found") || !check_europe.equalsIgnoreCase("User not found");
     }
