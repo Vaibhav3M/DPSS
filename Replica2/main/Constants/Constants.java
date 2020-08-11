@@ -50,4 +50,55 @@ public class Constants {
         return 0;
     }
 
+    public static String calculateEndResult(String result, String response1, String response2) {
+
+        String response = "";
+        // 3. Compare the results
+        String RMRequestData = "";
+
+        // R1 == R2 == R3 -> T|T|T
+        if(result.equals(response1) && result.equals(response2)){
+
+            // all are same
+            // send this to RM => "T|T|T"
+            RMRequestData = "T|T|T";
+            // Send outputR1/R2/R3 to Front-End
+            response      =  result;
+        }
+        // R1 != R2 == R3 -> F|T|T
+        else if(!result.equals(response1) && result.equals(response2)) {
+            // Leader(R1) is wrong
+            // send this to RM => "F|T|T"
+            RMRequestData = "F|T|T";
+            // Send outputR2/R3 to Front-End
+            response      =  response1;
+        }
+        // R1 == R2 != R3 -> T|T|F
+        else if(result.equals(response1) && !result.equals(response2)){
+
+            // R1 == R2
+            // R3 is wrong
+            // send this to RM => "T|T|F"
+            RMRequestData = "T|T|F";
+            // Send outputR1/R2 to Front-End
+            response      =  response1;
+
+        }
+        // R1 != R2 != R3 AND (R1 == R3) -> T|F|T
+        else if(result.equals(response2) && !result.equals(response1) && !response2.equals(response1) ){
+            // R2 is wrong
+            // leader, R1 right (Send this to the client)
+            // send this to RM => "T|F|T"
+            RMRequestData = "F|T|T";
+            // Send outputR1/R3 to Front-End
+            response      =  response2;
+        }
+
+        // 4. send results to RM
+        // SendResultsToRM(RMRequestData);
+
+        return response;
+    }
+
+
 }

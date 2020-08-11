@@ -97,28 +97,12 @@ public class AsianServerImpl extends GameServerPOA {
         LOGGER.info("Player Created successfully - " + player.toString());
 
         if (isLeader) {
-            result = calculateEndResult(result, response1, response2);
+            result = Constants.calculateEndResult(result, response1, response2);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
         return result;
     }
 
-    private String calculateEndResult(String result, String response1, String response2) {
-
-        if (result.equalsIgnoreCase(response1) && result.equalsIgnoreCase(response2)) {
-            return result;
-        }
-
-        if (!result.equalsIgnoreCase(response1)) {
-
-        }
-
-        if (!result.equalsIgnoreCase(response2)) {
-
-        }
-        return result;
-
-    }
 
     @Override
     public String playerSignIn(String Username, String Password, String IPAddress) {
@@ -173,7 +157,7 @@ public class AsianServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result = calculateEndResult(result, response1, response2);
+            result = Constants.calculateEndResult(result, response1, response2);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
@@ -237,7 +221,7 @@ public class AsianServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result = calculateEndResult(result, response1, response2);
+            result = Constants.calculateEndResult(result, response1, response2);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
@@ -340,7 +324,7 @@ public class AsianServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result = calculateEndResult(result, response1, response2);
+            result = Constants.calculateEndResult(result, response1, response2);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
@@ -394,7 +378,7 @@ public class AsianServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result = calculateEndResult(result, response1, response2);
+            result = Constants.calculateEndResult(result, response1, response2);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
