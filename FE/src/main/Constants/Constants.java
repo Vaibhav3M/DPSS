@@ -2,6 +2,7 @@ package FE.src.main.Constants;
 
 public class Constants {
 
+    public static boolean isLeader = true;
     /* Game server ports */
     public static final int SERVER_PORT_AMERICA = 2421;
     public static final int SERVER_PORT_EUROPE = 5892;

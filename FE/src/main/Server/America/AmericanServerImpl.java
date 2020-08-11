@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class AmericanServerImpl extends GameServerPOA {
 
 
-    static boolean isLeader = true;
+    static boolean isLeader = Constants.isLeader;
     private ORB orb;
     private static final long serialVersionUID = 7526472295622776147L;
 
@@ -180,8 +180,9 @@ public class AmericanServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
+
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
         //return Username + " not found";
@@ -220,6 +221,7 @@ public class AmericanServerImpl extends GameServerPOA {
                             if (!currPlayer.isSignedIn()) {
                                 LOGGER.info("Player is not SignedIn - " + "Username=" + Username);
                                 result = currPlayer.getUserName() + " is not signed in.";
+                                break;
                             }
                             currPlayer.setSignedIn(false);
                             playerList.remove(i);
@@ -345,8 +347,9 @@ public class AmericanServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
+
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
        // return "User not found";
@@ -400,8 +403,8 @@ public class AmericanServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
         //return UsernameToSuspend + " not found";
