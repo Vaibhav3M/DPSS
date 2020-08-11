@@ -146,7 +146,7 @@ public class R2_AsianServer {
             // bind the Object Reference in Naming
             NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_ASIA);
             ncRef.rebind(path, href);
-            System.out.println("AsianServer ready and waiting ...");
+            System.out.println("AsianServer ready and waiting at - " + Constants.SERVER_PORT_ASIA);
 
             // wait for invocations from clients
             orb.run();
