@@ -320,7 +320,6 @@ public class AmericanServerImpl extends GameServerPOA {
 
                         String response = generateUDPResponse(newServerPort, "7:" + playerInfo);
 
-                        System.out.println(response);
                         if (response.equalsIgnoreCase("Successful")) {
 
                             playerList.remove(i);
@@ -464,6 +463,8 @@ public class AmericanServerImpl extends GameServerPOA {
     private void addDummyData() {
         addDummyDataHelper(new Player("Test", "Test", 21, "Test_America", "test123", String.valueOf(Constants.SERVER_IP_AMERICA), false));
         addDummyDataHelper(new Player("Alex", "Alex", 21, "Alex1212", "alex123", String.valueOf(Constants.SERVER_IP_AMERICA), true));
+        addDummyDataHelper(new Player("Alex", "Alex", 21, "qwqwqw", "qwqwqw", String.valueOf(Constants.SERVER_IP_AMERICA), true));
+
     }
 
     private void addDummyDataHelper(Player player) {

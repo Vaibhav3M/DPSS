@@ -418,9 +418,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         Thread UDPThread = new Thread(() ->
         {
             try {
-                //System.out.println(action + " " + serverPort + " ");
                 response[0] = sendReceiveUDPMessage.getUDPResponse(action, serverPort, Constants.SERVER_PORT_AMERICA);
-                System.out.println(response[0] + " R! ");
 
             } catch (Exception e) {
                 System.out.println("Exception at getPlayerStatus: " + e.getLocalizedMessage());
@@ -458,6 +456,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
     private void addDummyData() {
         addDummyDataHelper(new Player("Test", "Test", 21, "Test_America", "test123", String.valueOf(Constants.SERVER_IP_AMERICA), false));
         addDummyDataHelper(new Player("Alex", "Alex", 21, "Alex1212", "alex123", String.valueOf(Constants.SERVER_IP_AMERICA), true));
+        addDummyDataHelper(new Player("Alex", "Alex", 21, "qwqwqw", "qwqwqw", String.valueOf(Constants.SERVER_IP_AMERICA), true));
     }
 
     private void addDummyDataHelper(Player player){

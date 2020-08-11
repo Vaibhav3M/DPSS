@@ -53,7 +53,7 @@ public class R1_AsianServer {
                 String request_IP = data[0];
 
                 switch (data[1].trim()){
-                    case "1" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],"1212"); //here IP address to to just check server IP
+                    case "1" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],String.valueOf(Constants.SERVER_IP_ASIA));
                         break;
                     case "2" : responseString = serverImpl.playerSignIn(data[2],data[3],data[4]);
                         break;
@@ -64,6 +64,9 @@ public class R1_AsianServer {
                     case "5" : responseString = serverImpl.transferAccount(data[2],data[3],data[4],data[5]);
                         break;
                     case "6" : responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
+                        break;
+                    case "7" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],"1212"); //here IP address to to just check server
+                        break;
                 }
 
 //                String request_IP = requestMessage.split(":")[0];
