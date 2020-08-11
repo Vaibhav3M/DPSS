@@ -2,6 +2,8 @@ package Replica2.main.Constants;
 
 public class Constants {
 
+    public static boolean isLeader = false;
+
     /* Game server ports */
     public static final int SERVER_PORT_AMERICA = 3001;
     public static final int SERVER_PORT_EUROPE = 3002;

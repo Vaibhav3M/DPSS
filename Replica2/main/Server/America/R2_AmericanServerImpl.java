@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 public class R2_AmericanServerImpl extends GameServerPOA {
 
+    static boolean isLeader = Constants.isLeader;
+
     private ORB orb;
     private static final long serialVersionUID = 7526472295622776147L;
 
@@ -36,10 +38,20 @@ public class R2_AmericanServerImpl extends GameServerPOA {
     @Override
     public String createPlayerAccount(String FirstName, String LastName, float Age, String Username, String Password, String IPAddress) {
 
+        String result = "Successful";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "1:" + FirstName + ":" + LastName + ":" + Math.round(Age) + ":" + Username + ":" + Password;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+        }
+
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
 
         //create player object
-        Player player = new Player(FirstName, LastName, Math.round(Age) , Username, Password, String.valueOf(Constants.SERVER_IP_AMERICA), false);
+        Player player = new Player(FirstName, LastName, Math.round(Age), Username, Password, String.valueOf(Constants.SERVER_IP_AMERICA), false);
 
         LOGGER.info("Received   request - Create Player - " + player.toString());
 
@@ -85,13 +97,46 @@ public class R2_AmericanServerImpl extends GameServerPOA {
 
         LOGGER.info("Player Created successfully - " + player.toString());
 
-        return "Successful";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+        return result;
+        // return "Successful";
+    }
+
+    private String calculateEndResult(String result, String response1, String response2) {
+
+        if (result.equalsIgnoreCase(response1) && result.equalsIgnoreCase(response2)) {
+            return result;
+        }
+
+        if (!result.equalsIgnoreCase(response1)) {
+
+        }
+
+        if (!result.equalsIgnoreCase(response2)) {
+
+        }
+        return result;
+
     }
 
     @Override
     public String playerSignIn(String Username, String Password, String IPAddress) {
 
         LOGGER.info("Received   request - SignIn Player - " + "Username=" + Username);
+
+        String result = Username + " not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "2:" + Username + ":" + Password + ":" + IPAddress;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+        }
+
 
         char playerKey = Username.charAt(0);
 
@@ -108,33 +153,52 @@ public class R2_AmericanServerImpl extends GameServerPOA {
 
                         if (currPlayer.isSignedIn()) {
                             LOGGER.info("Player is already SignedIn - " + "Username=" + Username);
-                            return currPlayer.getUserName() + " is already logged in.";
+                            result = currPlayer.getUserName() + " is already logged in.";
+                        } else {
+                            currPlayer.setSignedIn(true);
+                            playerList.remove(i);
+                            playerList.add(currPlayer);
+                            playersTable.put(playerKey, playerList);
+
+                            LOGGER.info("Player SignedIn - " + "Username=" + Username);
+                            result = currPlayer.getUserName() + " has logged in.";
                         }
-
-                        currPlayer.setSignedIn(true);
-                        playerList.remove(i);
-                        playerList.add(currPlayer);
-                        playersTable.put(playerKey, playerList);
-
-                        LOGGER.info("Player SignedIn - " + "Username=" + Username);
-                        return currPlayer.getUserName() + " has logged in.";
+                        break;
                     }
                 }
             } else {
 
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return Username + " not found";
+                result = Username + " not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return Username + " not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
+
+        }
+
+        return result;
+        //return Username + " not found";
     }
 
     @Override
     public String playerSignOut(String Username, String IPAddress) {
+
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
+
+        String result = "User not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader && isFromServerIP) {
+            String action = "3:" + Username  + ":" + IPAddress;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+        }
 
         char playerKey = Username.charAt(0);
 
@@ -154,71 +218,89 @@ public class R2_AmericanServerImpl extends GameServerPOA {
 
                             if (!currPlayer.isSignedIn()) {
                                 LOGGER.info("Player is not SignedIn - " + "Username=" + Username);
-                                return currPlayer.getUserName() + " is not signed in.";
+                                result = currPlayer.getUserName() + " is not signed in.";
+                                break;
                             }
                             currPlayer.setSignedIn(false);
                             playerList.remove(i);
                             playerList.add(currPlayer);
                             playersTable.put(playerKey, playerList);
-                        }
-                        LOGGER.info("Player SignedOut - " + "Username=" + Username);
 
-                        return currPlayer.getUserName() + " has logged out.";
+                        }
+                        result = currPlayer.getUserName() + " has logged out.";
+
+                        LOGGER.info("Player SignedOut - " + "Username=" + Username);
+                        break;
                     }
                 }
             } else {
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return "User not found";
+                result = "User not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return "User not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+        //return "User not found";
     }
 
     @Override
     public String getPlayerStatus(String AdminUsername, String AdminPassword, String IPAddress, boolean checkOtherServers) {
-
         if (!AdminUsername.equalsIgnoreCase("Admin") || !AdminPassword.equalsIgnoreCase("Admin")) {
             return "Username or password incorrect.";
         }
 
-            String response = "NA: ";
-            int onlineCount = 0;
-            int offlineCount = 0;
-            try {
-                lock.lock();
-                for (char key : playersTable.keySet()) {
-                    for (Player p : playersTable.get(key)) {
-                        if (p.isSignedIn()) onlineCount++;
-                        else offlineCount++;
-                    }
+        String response = "NA: ";
+        int onlineCount = 0;
+        int offlineCount = 0;
+        try {
+            lock.lock();
+            for (char key : playersTable.keySet()) {
+                for (Player p : playersTable.get(key)) {
+                    if (p.isSignedIn()) onlineCount++;
+                    else offlineCount++;
                 }
-            } finally {
-                lock.unlock();
             }
-
-            String response_Asia = "";
-            String response_Europe = "";
-
-            //Send UDP requests to other servers
-            if (checkOtherServers) {
-                response_Asia = generateUDPResponse(Constants.SERVER_PORT_ASIA,"6");
-                response_Europe = generateUDPResponse(Constants.SERVER_PORT_EUROPE,"6");
-            }
-
-            //append the results
-            response = response + onlineCount + " online, " + offlineCount + " offline. " + response_Asia + response_Europe;
-            return response;
+        } finally {
+            lock.unlock();
         }
+
+        String response_Asia = "";
+        String response_Europe = "";
+
+        //Send UDP requests to other servers
+        if (checkOtherServers) {
+            response_Asia = generateUDPResponse(Constants.SERVER_PORT_ASIA, "6");
+            response_Europe = generateUDPResponse(Constants.SERVER_PORT_EUROPE, "6");
+        }
+
+        //append the results
+        response = response + onlineCount + " online, " + offlineCount + " offline. " + response_Asia + response_Europe;
+        return response;
+    }
 
     @Override
     public String transferAccount(String Username, String Password, String OldIPAddress, String NewIPAddress) {
 
-        LOGGER.info("Received request - Transfer Player - " + "Username= " + Username + " OldIP: " + OldIPAddress + " NewIP: " +  NewIPAddress);
+        LOGGER.info("Received request - Transfer Player - " + "Username= " + Username + " OldIP: " + OldIPAddress + " NewIP: " + NewIPAddress);
 
-        if(OldIPAddress.equalsIgnoreCase(NewIPAddress)) return "New IP and Old IP must be different";
+        if (OldIPAddress.equalsIgnoreCase(NewIPAddress)) return "New IP and Old IP must be different";
+
+        String result = "User not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "5:" + Username  + ":" + Password + ":" + OldIPAddress + ":" + NewIPAddress;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+        }
 
         char playerKey = Username.charAt(0);
 
@@ -236,31 +318,39 @@ public class R2_AmericanServerImpl extends GameServerPOA {
                         int newServerPort = Constants.getServerPortFromIP(Integer.parseInt(NewIPAddress));
                         String playerInfo = currPlayer.getFirstName() + ":" + currPlayer.getLastName() + ":" + currPlayer.getAge() + ":" + currPlayer.getUserName() + ":" + currPlayer.getPassword();
 
-                        String response = generateUDPResponse(newServerPort,"7:" + playerInfo);
+                        String response = generateUDPResponse(newServerPort, "7:" + playerInfo);
+
                         if (response.equalsIgnoreCase("Successful")) {
 
                             playerList.remove(i);
                             playersTable.put(playerKey, playerList);
 
-                            LOGGER.info("Player "+ "Username=" + Username + " has been transferred to  - " + NewIPAddress);
+                            LOGGER.info("Player " + "Username=" + Username + " has been transferred to  - " + NewIPAddress);
 
-                            return currPlayer.getUserName() + " has been transferred to - " + NewIPAddress;
-                        }
-                        else{
+                            result = currPlayer.getUserName() + " has been transferred to - " + NewIPAddress;
+                        } else {
 
-                            return currPlayer.getUserName() + " cannot be transferred.";
+                            result = currPlayer.getUserName() + " cannot be transferred.";
                         }
+                        break;
                     }
                 }
             } else {
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return "User not found";
+                result  = "User not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return "User not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
+
+        }
+
+        return result;
+        // return "User not found";
 
     }
 
@@ -268,6 +358,16 @@ public class R2_AmericanServerImpl extends GameServerPOA {
     public String suspendAccount(String AdminUsername, String AdminPassword, String AdminIP, String UsernameToSuspend) {
 
         LOGGER.info("Received request - Suspend Player - " + "Username=" + UsernameToSuspend);
+
+        String result = UsernameToSuspend + " not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "4:" + AdminUsername  + ":" + AdminPassword + ":" + AdminIP + ":" + UsernameToSuspend;
+            response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+        }
 
         char playerKey = UsernameToSuspend.charAt(0);
 
@@ -286,19 +386,26 @@ public class R2_AmericanServerImpl extends GameServerPOA {
                         playersTable.put(playerKey, playerList);
 
                         LOGGER.info("Player Suspended - " + "Username=" + UsernameToSuspend);
-                        return currPlayer.getUserName() + " has been suspended. ";
+                        result =  currPlayer.getUserName() + " has been suspended. ";
+                        break;
                     }
                 }
             } else {
 
                 LOGGER.info("Player not found - " + "Username=" + UsernameToSuspend);
-                return UsernameToSuspend + " not found";
+                result = UsernameToSuspend + " not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return UsernameToSuspend + " not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
+        }
+
+        return result;
+        //return UsernameToSuspend + " not found";
     }
 
     /**
