@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 public class R1_AmericanServerImpl extends GameServerPOA {
 
-    static boolean isLeader = false;
+    static boolean isLeader = Constants.isLeader;
 
     private ORB orb;
     private static final long serialVersionUID = 7526472295622776147L;

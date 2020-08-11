@@ -190,13 +190,14 @@ public class AmericanServerImpl extends GameServerPOA {
 
     @Override
     public String playerSignOut(String Username, String IPAddress) {
+
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
 
         String result = "User not found";
         String response1 = "";
         String response2 = "";
 
-        if (isLeader) {
+        if (isLeader && isFromServerIP) {
             String action = "3:" + Username  + ":" + IPAddress;
             response1 = generateUDPResponse(Constants.R1_SERVER_PORT_AMERICA, action);
             response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
