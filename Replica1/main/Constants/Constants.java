@@ -54,9 +54,9 @@ public class Constants {
 
     public static String calculateEndResult(String result, String response1, String response2, int serverPort) {
 
-        String response = "";
+        String response = result;
         // Compare the results
-        String RMRequestData = "";
+        String RMRequestData = "T&T&T";
 
         // R1 == R2 == R3
         if(result.equals(response1) && result.equals(response2)){

@@ -52,6 +52,7 @@ public class ReplicaManager {
 
                 String[] data = requestMessage.split(":");
                 String request_IP = data[0];
+                System.out.println(requestMessage);
                 switch (data[1].trim()) {
 
                     case "1":
@@ -174,13 +175,17 @@ public class ReplicaManager {
 
         // Check counter values
         if (errorCount_R1 >= 3) {
-            interruptThreads(R1);
+            errorCount_R1 = 0;
+            System.out.println("Replica1 restarted");
+
+           // interruptThreads(R1);
             // Start new Replica 1 as leader;
             startReplica1(args);
             response = "Replica1 restarted";
         }
 
         if (errorCount_R2 >= 3) {
+            errorCount_R2 = 0;
             interruptThreads(R2);
             // Start new  Replica 2;
             startReplica2(args);
@@ -189,6 +194,7 @@ public class ReplicaManager {
         }
 
         if (errorCount_R3 >= 3) {
+            errorCount_R3 = 0;
             interruptThreads(R3);
             // Start new Replica 3;
             startReplica3(args);
