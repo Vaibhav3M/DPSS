@@ -98,7 +98,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         LOGGER.info("Player Created successfully - " + player.toString());
 
         if (isLeader) {
-            result = Constants.calculateEndResult(result, response1, response2);
+            result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_AMERICA);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
         return result;
@@ -158,7 +158,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result =Constants.calculateEndResult(result, response1, response2);
+                result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_AMERICA);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
@@ -221,7 +221,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result =Constants.calculateEndResult(result, response1, response2);
+                result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_AMERICA);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
@@ -323,7 +323,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result =Constants.calculateEndResult(result, response1, response2);
+                result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_AMERICA);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 
@@ -377,7 +377,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         }
 
         if (isLeader) {
-            result =Constants.calculateEndResult(result, response1, response2);
+                result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_AMERICA);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
 

@@ -1,5 +1,6 @@
 package ReplicaManager.src.main;
 
+import FE.src.main.Constants.Constants;
 import FE.src.main.Server.America.AmericanServer;
 import FE.src.main.Server.Asia.AsianServer;
 import FE.src.main.Server.Europe.EuropeanServer;
@@ -10,11 +11,18 @@ import Replica2.main.Server.America.R2_AmericanServer;
 import Replica2.main.Server.Asia.R2_AsianServer;
 import Replica2.main.Server.Europe.R2_EuropeanServer;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+
 public class ReplicaManager {
 
-    int errorCount_R1 = 0;
-    int errorCount_R2 = 0;
-    int errorCount_R3 = 0;
+    private static final int REPLICA_SERVER_PORT = 4000;
+
+    static int errorCount_R1 = 0;
+    static int errorCount_R2 = 0;
+    static int errorCount_R3 = 0;
 
     private static Thread[] R1 = new Thread[3];
     private static Thread[] R2 = new Thread[3];
@@ -23,7 +31,100 @@ public class ReplicaManager {
     //1 is R1, 2 is R2, 3 is R3
     private static int leader_id = 1;
 
+
+    public static void recieve(String[] args) {
+
+        String responseString = "";
+        DatagramSocket dataSocket = null;
+
+        try {
+
+            dataSocket = new DatagramSocket(REPLICA_SERVER_PORT);
+            byte[] buffer = new byte[1000];
+            //LOGGER.info("Server started..!!!");
+            System.out.println("RM Started at " + REPLICA_SERVER_PORT);
+            while (true) {
+                DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+                dataSocket.receive(request);
+                String requestMessage = new String(request.getData(), 0, request.getLength());
+
+                //  LOGGER.info("Received UDP request message: " + requestMessage);
+
+                String[] data = requestMessage.split(":");
+                String request_IP = data[0];
+                switch (data[1].trim()) {
+
+                    case "1":
+                        responseString = wrongAnswerNotification(data[2], args);
+                        break;
+                    case "2":
+                        responseString = "";
+                        break;
+                    case "3":
+                        responseString = "";
+                        break;
+
+                }
+
+                System.out.println("response sent " + responseString);
+                //LOGGER.info("Sent UDP response message: " + responseString);
+                DatagramPacket reply = new DatagramPacket(responseString.getBytes(), responseString.length(), request.getAddress(), request.getPort());
+
+                dataSocket.send(reply);
+            }
+
+        } catch (SocketException e) {
+            // LOGGER.info("Exception at socket" + e.getLocalizedMessage());
+        } catch (IOException e) {
+            // LOGGER.info("Exception at IO" + e.getLocalizedMessage());
+        } finally {
+            if (dataSocket != null) dataSocket.close();
+            //if (fileHandler != null) fileHandler.close();
+        }
+
+    }
+
     public static void main(String[] args) {
+
+        Thread RM_thread = new Thread(() ->
+        {
+            try {
+
+                //UDP setup
+                recieve(args);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Exception at main" + e.getLocalizedMessage());
+            }
+        });
+
+        RM_thread.setName("thread_RM");
+        RM_thread.start();
+
+        RMsetup(1, args);
+
+
+    }
+
+    private static void RMsetup(int leader, String[] args) {
+        errorCount_R1 = 0;
+        errorCount_R2 = 0;
+        errorCount_R3 = 0;
+
+        leader_id = leader;
+
+        switch (leader){
+            case 1:
+                Constants.isLeader = true;
+                break;
+            case 2:
+                Replica1.main.Constants.Constants.isLeader = true;
+                break;
+            case 3:
+                Replica2.main.Constants.Constants.isLeader = true;
+                break;
+        }
 
         R1 = startReplica1(args);
         R2 = startReplica2(args);
@@ -33,6 +134,71 @@ public class ReplicaManager {
         Runtime.getRuntime().addShutdownHook(shutDownTask);
 
     }
+
+    private static String wrongAnswerNotification(String datum, String args[]) {
+
+        String response = "All three servers matched";
+        String[] results = datum.trim().split("&");
+
+        for (int i = 0; i < 3; i++) {
+
+            if (results[i].equals("T")) {
+                // Skip it
+                if (i == 0) {
+                    errorCount_R1 = 0;
+                }
+                if (i == 1) {
+                    errorCount_R2 = 0;
+                }
+                if (i == 2) {
+                    errorCount_R3 = 0;
+                }
+            } else if (results[i].equals("F")) {
+                // Increment by 1
+                if (i == 0) {
+                    response = "Replica1 didn't match";
+                    errorCount_R1++;
+                }
+                if (i == 1) {
+                    response = "Replica2 didn't match";
+
+                    errorCount_R2++;
+                }
+                if (i == 2) {
+                    response = "Replica3 didn't match";
+                    errorCount_R3++;
+                }
+            }
+
+        }
+
+        // Check counter values
+        if (errorCount_R1 >= 3) {
+            interruptThreads(R1);
+            // Start new Replica 1 as leader;
+            startReplica1(args);
+            response = "Replica1 restarted";
+        }
+
+        if (errorCount_R2 >= 3) {
+            interruptThreads(R2);
+            // Start new  Replica 2;
+            startReplica2(args);
+            response = "Replica1 restarted";
+
+        }
+
+        if (errorCount_R3 >= 3) {
+            interruptThreads(R3);
+            // Start new Replica 3;
+            startReplica3(args);
+            response = "Replica1 restarted";
+
+        }
+
+        return response;
+    }
+
 
     private static void interruptThreads(Thread[] r1) {
         for (Thread t : r1) {

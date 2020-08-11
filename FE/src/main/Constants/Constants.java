@@ -1,5 +1,7 @@
 package FE.src.main.Constants;
 
+import FE.src.main.SendUDP.SendReceiveUDPMessage;
+
 public class Constants {
 
     public static boolean isLeader = true;
@@ -50,54 +52,90 @@ public class Constants {
         return 0;
     }
 
-    public static String calculateEndResult(String result, String response1, String response2) {
+    public static String calculateEndResult(String result, String response1, String response2, int serverPort) {
 
         String response = "";
-        // 3. Compare the results
+        // Compare the results
         String RMRequestData = "";
 
-        // R1 == R2 == R3 -> T|T|T
+        // R1 == R2 == R3
         if(result.equals(response1) && result.equals(response2)){
 
             // all are same
-            // send this to RM => "T|T|T"
-            RMRequestData = "T|T|T";
-            // Send outputR1/R2/R3 to Front-End
-            response      =  result;
+            // send this to RM
+            RMRequestData = "T&T&T";
+
+            response = result;
         }
         // R1 != R2 == R3 -> F|T|T
         else if(!result.equals(response1) && result.equals(response2)) {
             // Leader(R1) is wrong
-            // send this to RM => "F|T|T"
-            RMRequestData = "F|T|T";
-            // Send outputR2/R3 to Front-End
-            response      =  response1;
+
+            // send this to RM
+            RMRequestData = "F&T&T";
+
+            response = response1;
         }
         // R1 == R2 != R3 -> T|T|F
         else if(result.equals(response1) && !result.equals(response2)){
 
             // R1 == R2
             // R3 is wrong
-            // send this to RM => "T|T|F"
-            RMRequestData = "T|T|F";
-            // Send outputR1/R2 to Front-End
-            response      =  response1;
+            // send this to RM
+            RMRequestData = "T&T&F";
+
+            response = response1;
 
         }
         // R1 != R2 != R3 AND (R1 == R3) -> T|F|T
         else if(result.equals(response2) && !result.equals(response1) && !response2.equals(response1) ){
             // R2 is wrong
-            // leader, R1 right (Send this to the client)
-            // send this to RM => "T|F|T"
-            RMRequestData = "F|T|T";
+            // leader, R1 right
+            // send this to RM
+            RMRequestData = "F&T&T";
             // Send outputR1/R3 to Front-End
-            response      =  response2;
+            response =  response2;
         }
 
-        // 4. send results to RM
-        // SendResultsToRM(RMRequestData);
+        //send results to RM
+         sendResultToRM(serverPort,RMRequestData);
 
         return response;
+    }
+
+    private static String sendResultToRM(int requestServerPort, String rmRequestData) {
+
+
+        //LOGGER.info("Created UDP request - Get player status from port " + serverPort);
+        String[] response = {"No response from RM"};
+
+        SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
+
+        System.out.println(rmRequestData);
+        //create a new thread for UDP request
+        Thread UDPThread = new Thread(() ->
+        {
+            try {
+                response[0] = sendReceiveUDPMessage.getUDPResponse("1:"+rmRequestData, 4000, requestServerPort);
+                System.out.println(response[0]);
+
+            } catch (Exception e) {
+                System.out.println("Exception at getPlayerStatus: " + e.getLocalizedMessage());
+            }
+
+        });
+
+        UDPThread.setName("Thread - UDP " + requestServerPort);
+        UDPThread.start();
+
+        try {
+            UDPThread.join();
+        } catch (Exception e) {
+            System.out.println("At getPlayerStatus:" + e.getLocalizedMessage());
+        }
+        //LOGGER.info("Received UDP response from " + serverPort + " - " + response[0]);
+        return response[0];
+
     }
 
 
