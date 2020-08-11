@@ -98,8 +98,8 @@ public class AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
         return result;
     }
 
@@ -341,8 +341,8 @@ public class AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
         // return "User not found";
@@ -395,8 +395,8 @@ public class AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
     }

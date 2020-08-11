@@ -99,8 +99,8 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
         return result;
     }
 
@@ -175,8 +175,8 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
         //return Username + " not found";
@@ -238,8 +238,8 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = calculateEndResult(result, response1, response2);
+            System.out.println(result + " - " + response1 + " - " + response2);
         }
-        System.out.println(result + " - " + response1 + " - " + response2);
 
         return result;
         //return "User not found";
