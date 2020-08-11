@@ -63,7 +63,7 @@ public class AmericanServerImpl extends GameServerPOA {
             if (checkUserName(player.getUserName())) {
 
                 LOGGER.info("Username=" + player.getUserName() + " already existed");
-                return "Username already exists 11";
+                return "Username already exists";
             }
         }
 
@@ -84,7 +84,7 @@ public class AmericanServerImpl extends GameServerPOA {
                     if (currPlayer.getUserName().equalsIgnoreCase(player.getUserName())) {
                         LOGGER.info("Username=" + player.getUserName() + " already existed");
 
-                        return "UserName already exists 22";
+                        return "UserName already exists";
                     }
                 }
                 playerList.add(player);

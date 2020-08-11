@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 public class R1_AmericanServerImpl extends GameServerPOA {
 
+    static boolean isLeader = false;
+
     private ORB orb;
     private static final long serialVersionUID = 7526472295622776147L;
 
@@ -35,6 +37,16 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
     @Override
     public String createPlayerAccount(String FirstName, String LastName, float Age, String Username, String Password, String IPAddress) {
+
+        String result = "Successful";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "1:" + FirstName + ":" + LastName + ":" + Math.round(Age) + ":" + Username + ":" + Password;
+            response1 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
 
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
 
@@ -85,13 +97,44 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         LOGGER.info("Player Created successfully - " + player.toString());
 
-        return "Successful";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+        return result;
+    }
+
+    private String calculateEndResult(String result, String response1, String response2) {
+
+        if (result.equalsIgnoreCase(response1) && result.equalsIgnoreCase(response2)) {
+            return result;
+        }
+
+        if (!result.equalsIgnoreCase(response1)) {
+
+        }
+
+        if (!result.equalsIgnoreCase(response2)) {
+
+        }
+        return result;
+
     }
 
     @Override
     public String playerSignIn(String Username, String Password, String IPAddress) {
 
         LOGGER.info("Received   request - SignIn Player - " + "Username=" + Username);
+
+        String result = Username + " not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "2:" + Username + ":" + Password + ":" + IPAddress;
+            response1 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
 
         char playerKey = Username.charAt(0);
 
@@ -117,24 +160,41 @@ public class R1_AmericanServerImpl extends GameServerPOA {
                         playersTable.put(playerKey, playerList);
 
                         LOGGER.info("Player SignedIn - " + "Username=" + Username);
-                        return currPlayer.getUserName() + " has logged in.";
+                        result = currPlayer.getUserName() + " has logged in.";
                     }
+                    break;
                 }
             } else {
 
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return Username + " not found";
+                result = Username + " not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return Username + " not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+        //return Username + " not found";
     }
 
     @Override
     public String playerSignOut(String Username, String IPAddress) {
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
+
+        String result = "User not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "3:" + Username  + ":" + IPAddress;
+            response1 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
 
         char playerKey = Username.charAt(0);
 
@@ -154,27 +214,35 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
                             if (!currPlayer.isSignedIn()) {
                                 LOGGER.info("Player is not SignedIn - " + "Username=" + Username);
-                                return currPlayer.getUserName() + " is not signed in.";
+                                result = currPlayer.getUserName() + " is not signed in.";
                             }
                             currPlayer.setSignedIn(false);
                             playerList.remove(i);
                             playerList.add(currPlayer);
                             playersTable.put(playerKey, playerList);
-                        }
-                        LOGGER.info("Player SignedOut - " + "Username=" + Username);
 
-                        return currPlayer.getUserName() + " has logged out.";
+                        }
+                        result = currPlayer.getUserName() + " has logged out.";
+
+                        LOGGER.info("Player SignedOut - " + "Username=" + Username);
+                        break;
                     }
                 }
             } else {
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return "User not found";
+                result = "User not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return "User not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+        //return "User not found";
     }
 
     @Override
@@ -218,6 +286,16 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         if(OldIPAddress.equalsIgnoreCase(NewIPAddress)) return "New IP and Old IP must be different";
 
+        String result = "User not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "5:" + Username  + ":" + Password + ":" + OldIPAddress + ":" + NewIPAddress;
+            response1 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
+
         char playerKey = Username.charAt(0);
 
         try {
@@ -242,25 +320,31 @@ public class R1_AmericanServerImpl extends GameServerPOA {
                             playerList.remove(i);
                             playersTable.put(playerKey, playerList);
 
-                            LOGGER.info("Player "+ "Username=" + Username + " has been transferred to  - " + NewIPAddress);
+                            LOGGER.info("Player " + "Username=" + Username + " has been transferred to  - " + NewIPAddress);
 
-                            return currPlayer.getUserName() + " has been transferred to - " + NewIPAddress;
-                        }
-                        else{
+                            result = currPlayer.getUserName() + " has been transferred to - " + NewIPAddress;
+                        } else {
 
-                            return currPlayer.getUserName() + " cannot be transferred.";
+                            result = currPlayer.getUserName() + " cannot be transferred.";
                         }
+                        break;
                     }
                 }
             } else {
                 LOGGER.info("Player not found - " + "Username=" + Username);
-                return "User not found";
+                result  = "User not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return "User not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+        // return "User not found";
 
     }
 
@@ -269,6 +353,15 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         LOGGER.info("Received request - Suspend Player - " + "Username=" + UsernameToSuspend);
 
+        String result = UsernameToSuspend + " not found";
+        String response1 = "";
+        String response2 = "";
+
+        if (isLeader) {
+            String action = "4:" + AdminUsername  + ":" + AdminPassword + ":" + AdminIP + ":" + UsernameToSuspend;
+            response1 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
+            response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
+        }
         char playerKey = UsernameToSuspend.charAt(0);
 
         try {
@@ -286,19 +379,26 @@ public class R1_AmericanServerImpl extends GameServerPOA {
                         playersTable.put(playerKey, playerList);
 
                         LOGGER.info("Player Suspended - " + "Username=" + UsernameToSuspend);
-                        return currPlayer.getUserName() + " has been suspended. ";
+                        result =  currPlayer.getUserName() + " has been suspended. ";
+                        break;
                     }
                 }
             } else {
 
                 LOGGER.info("Player not found - " + "Username=" + UsernameToSuspend);
-                return UsernameToSuspend + " not found";
+                result = UsernameToSuspend + " not found";
             }
         } finally {
             lock.unlock();
         }
 
-        return UsernameToSuspend + " not found";
+        if (isLeader) {
+            result = calculateEndResult(result, response1, response2);
+        }
+        System.out.println(result + " - " + response1 + " - " + response2);
+
+        return result;
+        //return UsernameToSuspend + " not found";
     }
 
     /**
@@ -320,6 +420,7 @@ public class R1_AmericanServerImpl extends GameServerPOA {
             try {
                 //System.out.println(action + " " + serverPort + " ");
                 response[0] = sendReceiveUDPMessage.getUDPResponse(action, serverPort, Constants.SERVER_PORT_AMERICA);
+                System.out.println(response[0] + " R! ");
 
             } catch (Exception e) {
                 System.out.println("Exception at getPlayerStatus: " + e.getLocalizedMessage());

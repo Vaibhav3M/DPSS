@@ -204,8 +204,8 @@ public class R2_AmericanServerImpl extends GameServerPOA {
 
             //Send UDP requests to other servers
             if (checkOtherServers) {
-                response_Asia = generateUDPResponse(Constants.SERVER_PORT_ASIA,"playerstatus");
-                response_Europe = generateUDPResponse(Constants.SERVER_PORT_EUROPE,"playerstatus");
+                response_Asia = generateUDPResponse(Constants.SERVER_PORT_ASIA,"6");
+                response_Europe = generateUDPResponse(Constants.SERVER_PORT_EUROPE,"6");
             }
 
             //append the results
