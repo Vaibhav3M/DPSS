@@ -1,6 +1,6 @@
-package FE.src.main.Constants;
+package ReplicaL.Constants;
 
-import FE.src.main.SendUDP.SendReceiveUDPMessage;
+import ReplicaL.SendUDP.SendReceiveUDPMessage;
 
 public class Constants {
 

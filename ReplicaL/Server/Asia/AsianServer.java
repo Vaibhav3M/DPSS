@@ -1,9 +1,9 @@
-package FE.src.main.Server.Europe;
+package ReplicaL.Server.Asia;
 
 import GameServer_CORBA.GameServer;
 import GameServer_CORBA.GameServerHelper;
-import FE.src.main.Constants.Constants;
-import FE.src.main.Utilities.CustomLogger;
+import ReplicaL.Constants.Constants;
+import ReplicaL.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
@@ -19,7 +19,7 @@ import java.net.SocketException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-public class EuropeanServer {
+public class AsianServer {
 
     public static boolean isLeader = false;
 
@@ -33,17 +33,16 @@ public class EuropeanServer {
      *
      * @param serverImpl the server
      */
-    public static void recieve(EuropeanServerImpl serverImpl) {
+    public static void recieve(AsianServerImpl serverImpl) {
 
         String responseString = "";
         DatagramSocket dataSocket = null;
 
         try {
 
-            dataSocket = new DatagramSocket(Constants.SERVER_PORT_EUROPE);
+            dataSocket = new DatagramSocket(Constants.SERVER_PORT_ASIA);
             byte[] buffer = new byte[1000];
             LOGGER.info("Server started..!!!");
-
             while (true) {
                 DatagramPacket request = new DatagramPacket(buffer, buffer.length);
                 dataSocket.receive(request);
@@ -57,7 +56,7 @@ public class EuropeanServer {
 
                 switch (data[1].trim()){
 
-                    case "1" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],String.valueOf(Constants.SERVER_IP_EUROPE));
+                    case "1" : responseString = serverImpl.createPlayerAccount(data[2],data[3],Integer.parseInt(data[4]),data[5],data[6],String.valueOf(Constants.SERVER_IP_ASIA));
                         break;
                     case "2" : responseString = serverImpl.playerSignIn(data[2],data[3],data[4]);
                         break;
@@ -80,12 +79,11 @@ public class EuropeanServer {
 //                if (requestMessage.split("=")[0].equalsIgnoreCase("username")) {
 //                    responseString = serverImpl.playerSignOut(requestMessage.split("=")[1], request_IP);
 //                } else if (requestMessage.equalsIgnoreCase("transferPlayer")) {
-//
+//                    System.out.println(requestMessage);
 //                    String playerString = new String(request.getData(), 0, request.getLength()).split(":")[2];
 //                    String[] playerArray = playerString.split(",");
 //
 //                    responseString = serverImpl.createPlayerAccount(playerArray[0], playerArray[1], Integer.parseInt(playerArray[2]), playerArray[3], playerArray[4], String.valueOf(Constants.SERVER_IP_AMERICA));
-//
 //                } else {
 //                    responseString = serverImpl.getPlayerStatus("Admin", "Admin", String.valueOf(request.getPort()), false);
 //                }
@@ -109,8 +107,8 @@ public class EuropeanServer {
 
     public static void main(String args[]) {
 
-        EuropeanServerImpl serverImplementation = new EuropeanServerImpl(LOGGER);
-        Thread server_europe = new Thread(() ->
+        AsianServerImpl serverImplementation = new AsianServerImpl(LOGGER);
+        Thread server_asia = new Thread(() ->
         {
             try {
                 //setup logger
@@ -124,8 +122,8 @@ public class EuropeanServer {
             }
         });
 
-        server_europe.setName("thread_Europe_server");
-        server_europe.start();
+        server_asia.setName("thread_Asia_server");
+        server_asia.start();
 
         // create and initialize the ORB
         ORB orb = ORB.init(args, null);
@@ -148,18 +146,19 @@ public class EuropeanServer {
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
             // bind the Object Reference in Naming
-            NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_EUROPE);
+            NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_ASIA);
             ncRef.rebind(path, href);
-            System.out.println("EuropeanServer ready and waiting at - " + Constants.SERVER_PORT_EUROPE);
+            System.out.println("AsianServer ready and waiting at - " + Constants.SERVER_PORT_ASIA);
+
+
             // wait for invocations from clients
             orb.run();
         } catch (Exception e) {
-            System.out.println("ERROR: " + e.getLocalizedMessage());
-            //   e.printStackTrace(System.out);
-            System.out.println("Some issue here ");
+            System.err.println("ERROR: " + e);
+            e.printStackTrace(System.out);
         }
         orb.shutdown(false);
-        System.out.println("EuropeanServer Exiting ...");
+        System.out.println("AsianServer Exiting ...");
     }
 
     /**
@@ -169,10 +168,9 @@ public class EuropeanServer {
         File files = new File(Constants.SERVER_LOG_DIRECTORY);
         if (!files.exists())
             files.mkdirs();
-        files = new File(Constants.SERVER_LOG_DIRECTORY + "EUROPE_Server.log");
+        files = new File(Constants.SERVER_LOG_DIRECTORY + "ASIA_Server.log");
         if (!files.exists())
             files.createNewFile();
         fileHandler = CustomLogger.setup(files.getAbsolutePath());
     }
 }
-

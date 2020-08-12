@@ -1,6 +1,6 @@
 package Replica1.main.Constants;
 
-import FE.src.main.SendUDP.SendReceiveUDPMessage;
+import ReplicaL.SendUDP.SendReceiveUDPMessage;
 
 public class Constants {
 
@@ -92,7 +92,7 @@ public class Constants {
             // R2 is wrong
             // leader, R1 right
             // send this to RM
-            RMRequestData = "F&T&T";
+            RMRequestData = "T&F&F";
             // Send outputR1/R3 to Front-End
             response =  response2;
         }

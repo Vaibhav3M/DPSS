@@ -1,4 +1,4 @@
-package FE.src.main.Constants;
+package ReplicaL.Constants;
 
 /**
  * The type Validations.

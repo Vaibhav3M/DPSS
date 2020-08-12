@@ -1,9 +1,9 @@
 package ReplicaManager.src.main;
 
-import FE.src.main.Constants.Constants;
-import FE.src.main.Server.America.AmericanServer;
-import FE.src.main.Server.Asia.AsianServer;
-import FE.src.main.Server.Europe.EuropeanServer;
+import ReplicaL.Constants.Constants;
+import ReplicaL.Server.America.AmericanServer;
+import ReplicaL.Server.Asia.AsianServer;
+import ReplicaL.Server.Europe.EuropeanServer;
 import Replica1.main.Server.America.R1_AmericanServer;
 import Replica1.main.Server.Asia.R1_AsianServer;
 import Replica1.main.Server.Europe.R1_EuropeanServer;

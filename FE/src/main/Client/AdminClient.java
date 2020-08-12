@@ -3,9 +3,9 @@ package FE.src.main.Client;
 
 import GameServer_CORBA.GameServer;
 import GameServer_CORBA.GameServerHelper;
-import FE.src.main.Constants.Constants;
-import FE.src.main.Constants.Validations;
-import FE.src.main.Utilities.CustomLogger;
+import ReplicaL.Constants.Constants;
+import ReplicaL.Constants.Validations;
+import ReplicaL.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;

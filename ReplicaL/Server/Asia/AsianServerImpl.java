@@ -1,9 +1,9 @@
-package FE.src.main.Server.Asia;
+package ReplicaL.Server.Asia;
 
 import GameServer_CORBA.GameServerPOA;
-import FE.src.main.Constants.Constants;
-import FE.src.main.Model.Player;
-import FE.src.main.SendUDP.SendReceiveUDPMessage;
+import ReplicaL.Constants.Constants;
+import ReplicaL.Model.Player;
+import ReplicaL.SendUDP.SendReceiveUDPMessage;
 import org.omg.CORBA.ORB;
 
 import java.util.ArrayList;

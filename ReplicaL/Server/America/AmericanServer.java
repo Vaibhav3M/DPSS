@@ -1,9 +1,9 @@
-package FE.src.main.Server.America;
+package ReplicaL.Server.America;
 
 import GameServer_CORBA.GameServer;
 import GameServer_CORBA.GameServerHelper;
-import FE.src.main.Constants.Constants;
-import FE.src.main.Utilities.CustomLogger;
+import ReplicaL.Constants.Constants;
+import ReplicaL.Utilities.CustomLogger;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
