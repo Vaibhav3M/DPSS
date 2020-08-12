@@ -433,8 +433,8 @@ public class R2_AsianServerImpl extends GameServerPOA {
     private boolean checkUserName(String userName) {
         FIFOUDPMessage FIFOUDPMessage = new FIFOUDPMessage();
 
-        String check_american = FIFOUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_AMERICA, Constants.SERVER_PORT_ASIA);
-        String check_europe = FIFOUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_EUROPE, Constants.SERVER_PORT_ASIA);
+        String check_american = FIFOUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_AMERICA, Constants.SERVER_PORT_ASIA);
+        String check_europe = FIFOUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_EUROPE, Constants.SERVER_PORT_ASIA);
 
         return !check_american.equalsIgnoreCase("User not found") || !check_europe.equalsIgnoreCase("User not found");
     }

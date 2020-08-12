@@ -176,8 +176,6 @@ public class ReplicaManager {
         // Check counter values
         if (errorCount_R1 >= 3) {
             errorCount_R1 = 0;
-            System.out.println("Replica1 restarted");
-
            // interruptThreads(R1);
             // Start new Replica 1 as leader;
             startReplica1(args);
@@ -189,7 +187,7 @@ public class ReplicaManager {
             interruptThreads(R2);
             // Start new  Replica 2;
             startReplica2(args);
-            response = "Replica1 restarted";
+            response = "Replica2 restarted";
 
         }
 
@@ -198,7 +196,7 @@ public class ReplicaManager {
             interruptThreads(R3);
             // Start new Replica 3;
             startReplica3(args);
-            response = "Replica1 restarted";
+            response = "Replica3 restarted";
 
         }
 

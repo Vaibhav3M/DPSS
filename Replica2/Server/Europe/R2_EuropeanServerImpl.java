@@ -60,7 +60,7 @@ public class R2_EuropeanServerImpl extends GameServerPOA {
             if (checkUserName(player.getUserName())) {
 
                 LOGGER.info("Username=" + player.getUserName() + " already existed");
-                return "Username already exists";
+                return "Username already exists 1";
             }
         }
 
@@ -81,7 +81,7 @@ public class R2_EuropeanServerImpl extends GameServerPOA {
                     if (currPlayer.getUserName().equalsIgnoreCase(player.getUserName())) {
                         LOGGER.info("Username=" + player.getUserName() + " already existed");
 
-                        return "UserName already exists";
+                        return "UserName already exists 2";
                     }
                 }
                 playerList.add(player);
@@ -98,7 +98,7 @@ public class R2_EuropeanServerImpl extends GameServerPOA {
         LOGGER.info("Player Created successfully - " + player.toString());
 
         if (isLeader) {
-                        result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_EUROPE);
+            result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_EUROPE);
             System.out.println(result + " - " + response1 + " - " + response2);
         }
         return result;
@@ -437,9 +437,8 @@ public class R2_EuropeanServerImpl extends GameServerPOA {
     private boolean checkUserName(String userName) {
         FIFOUDPMessage FIFOUDPMessage = new FIFOUDPMessage();
 
-        String check_american = FIFOUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_AMERICA, Constants.SERVER_PORT_EUROPE);
-        String check_asia = FIFOUDPMessage.getUDPResponse("UserName=" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_EUROPE);
-
+        String check_american = FIFOUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_AMERICA, Constants.SERVER_PORT_EUROPE);
+        String check_asia = FIFOUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_EUROPE);
         return !check_american.equalsIgnoreCase("User not found") || !check_asia.equalsIgnoreCase("User not found");
     }
 

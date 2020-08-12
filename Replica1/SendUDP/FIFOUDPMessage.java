@@ -1,12 +1,25 @@
 package Replica1.SendUDP;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.*;
 
 /**
  * The Send udp request message.
  */
 public class FIFOUDPMessage {
+
+
+    private int maxattempts = 2;
+    private int timeout = 1500;
+
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+    public void setMaxTries(int maxAttempts) {
+        this.maxattempts = maxAttempts;
+    }
 
 
     /**
@@ -22,8 +35,12 @@ public class FIFOUDPMessage {
         DatagramSocket datagramSocket = null;
         String response = "No response from " + client_PORT_Address;
 
+
         try{
             datagramSocket = new DatagramSocket();
+
+            int attempts = 0;
+            datagramSocket.setSoTimeout(timeout);
 
             byte[] message = (sender_PORT_Address+":"+actionMessage).getBytes();
             InetAddress hostAddress = InetAddress.getByName("localhost");
@@ -34,9 +51,17 @@ public class FIFOUDPMessage {
             byte[] buffer = new byte[1000];
 
             DatagramPacket serverResponse = new DatagramPacket(buffer,buffer.length);
-            datagramSocket.receive(serverResponse);
 
-            response = new String(serverResponse.getData(),0,serverResponse.getLength());
+         //  do {
+               try {
+                   datagramSocket.receive(serverResponse);
+
+                   response = new String(serverResponse.getData(), 0, serverResponse.getLength());
+               } catch (InterruptedIOException e) {
+                   attempts += 1;
+                   System.out.println("Attempts " + attempts);
+               }
+          // }while(!response.split(" ")[0].equals("No")  && (attempts < maxattempts));
 
         }catch (SocketException e){
             System.out.println("Socket creation failed due to: " + e.getLocalizedMessage());

@@ -59,42 +59,42 @@ public class Constants {
         String RMRequestData = "T&T&T";
 
         // R1 == R2 == R3
-        if(result.equals(response1) && result.equals(response2)){
+        if (!result.equals(response1) && !response1.equals(response2) && !result.equals(response2)) {
 
             // all are same
+            // send this to RM
+            RMRequestData = "T&F&F";
+
+            response = result;
+        }
+        // R1 != R2 == R3 -> F|T|T
+        if (result.equals(response1) && response1.equals(response2)) {
+            // Leader(R1) is wrong
+
             // send this to RM
             RMRequestData = "T&T&T";
 
             response = result;
         }
-        // R1 != R2 == R3 -> F|T|T
-        else if(!result.equals(response1) && result.equals(response2)) {
-            // Leader(R1) is wrong
-
-            // send this to RM
-            RMRequestData = "F&T&T";
-
-            response = response1;
-        }
         // R1 == R2 != R3 -> T|T|F
-        else if(result.equals(response1) && !result.equals(response2)){
+        if (result.equals(response1)) {
 
             // R1 == R2
             // R3 is wrong
             // send this to RM
             RMRequestData = "T&T&F";
 
-            response = response1;
+            response = result;
 
         }
         // R1 != R2 != R3 AND (R1 == R3) -> T|F|T
-        else if(result.equals(response2) && !result.equals(response1) && !response2.equals(response1) ){
+        if (result.equals(response2)) {
             // R2 is wrong
             // leader, R1 right
             // send this to RM
             RMRequestData = "T&F&T";
             // Send outputR1/R3 to Front-End
-            response =  response2;
+            response =  result;
         }
 
         //send results to RM
