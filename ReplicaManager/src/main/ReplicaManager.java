@@ -4,12 +4,12 @@ import ReplicaL.Constants.Constants;
 import ReplicaL.Server.America.AmericanServer;
 import ReplicaL.Server.Asia.AsianServer;
 import ReplicaL.Server.Europe.EuropeanServer;
-import Replica1.main.Server.America.R1_AmericanServer;
-import Replica1.main.Server.Asia.R1_AsianServer;
-import Replica1.main.Server.Europe.R1_EuropeanServer;
-import Replica2.main.Server.America.R2_AmericanServer;
-import Replica2.main.Server.Asia.R2_AsianServer;
-import Replica2.main.Server.Europe.R2_EuropeanServer;
+import Replica1.Server.America.R1_AmericanServer;
+import Replica1.Server.Asia.R1_AsianServer;
+import Replica1.Server.Europe.R1_EuropeanServer;
+import Replica2.Server.America.R2_AmericanServer;
+import Replica2.Server.Asia.R2_AsianServer;
+import Replica2.Server.Europe.R2_EuropeanServer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -120,10 +120,10 @@ public class ReplicaManager {
                 Constants.isLeader = true;
                 break;
             case 2:
-                Replica1.main.Constants.Constants.isLeader = true;
+                Replica1.Constants.Constants.isLeader = true;
                 break;
             case 3:
-                Replica2.main.Constants.Constants.isLeader = true;
+                Replica2.Constants.Constants.isLeader = true;
                 break;
         }
 
