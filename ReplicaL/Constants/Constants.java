@@ -58,26 +58,31 @@ public class Constants {
         // Compare the results
         String RMRequestData = "T&T&T";
 
+        boolean resultStatus = false;
+
         // R1 == R2 == R3
-        if (!result.equals(response1) && !response1.equals(response2) && !result.equals(response2)) {
+        if (!result.equals(response1) && !response1.equals(response2) && !result.equals(response2) && !resultStatus) {
 
             // all are same
             // send this to RM
             RMRequestData = "T&F&F";
 
             response = result;
+            resultStatus = true;
         }
         // R1 != R2 == R3 -> F|T|T
-        if (result.equals(response1) && response1.equals(response2)) {
+        if (result.equals(response1) && response1.equals(response2) && !resultStatus) {
             // Leader(R1) is wrong
 
             // send this to RM
             RMRequestData = "T&T&T";
 
             response = result;
+            resultStatus = true;
+
         }
         // R1 == R2 != R3 -> T|T|F
-        if (result.equals(response1)) {
+        if (result.equals(response1) && !resultStatus) {
 
             // R1 == R2
             // R3 is wrong
@@ -85,16 +90,20 @@ public class Constants {
             RMRequestData = "T&T&F";
 
             response = result;
+            resultStatus = true;
+
 
         }
         // R1 != R2 != R3 AND (R1 == R3) -> T|F|T
-        if (result.equals(response2)) {
+        if (result.equals(response2) && !resultStatus) {
             // R2 is wrong
             // leader, R1 right
             // send this to RM
             RMRequestData = "T&F&T";
             // Send outputR1/R3 to Front-End
             response =  result;
+            resultStatus = true;
+
         }
 
         //send results to RM

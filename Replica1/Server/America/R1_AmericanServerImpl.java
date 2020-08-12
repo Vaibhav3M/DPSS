@@ -410,8 +410,8 @@ public class R1_AmericanServerImpl extends GameServerPOA {
 
         });
 
-        UDPThread.setName("Thread - UDP " + serverPort);
-        UDPThread.start();
+        //UDPThread.setName("Thread - UDP " + serverPort);
+         UDPThread.start();
 
         try {
             UDPThread.join();

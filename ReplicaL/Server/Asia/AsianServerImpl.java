@@ -410,7 +410,7 @@ public class AsianServerImpl extends GameServerPOA {
 
         });
 
-        UDPThread.setName("Thread - UDP " + serverPort);
+      //  UDPThread.setName("Thread - UDP " + serverPort);
         UDPThread.start();
 
         try {

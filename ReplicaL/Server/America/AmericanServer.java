@@ -55,6 +55,7 @@ public class AmericanServer {
                 LOGGER.info("Received UDP request message: " + requestMessage);
 
                 if(!requestQueue.isEmpty()){
+                    System.out.println("Request from Queue");
                     socket.receive(request);
                 }
                 String[] data = requestMessage.split(":");
@@ -180,6 +181,18 @@ public class AmericanServer {
         if (!files.exists())
             files.createNewFile();
         fileHandler = CustomLogger.setup(files.getAbsolutePath());
+    }
+
+    private static boolean testRuns(){
+        boolean result = true;
+        //test
+        try {
+            requestQueue.add("");
+            requestQueue.remove("");
+        }catch (Exception e){
+            result  = false;
+        }
+        return result;
     }
 }
 

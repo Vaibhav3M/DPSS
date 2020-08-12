@@ -61,7 +61,7 @@ public class FIFOUDPMessage {
                    attempts += 1;
                    //System.out.println("Attempts " + attempts);
                }
-           }while(reponseStatus  || (attempts < maxattempts));
+           }while(reponseStatus  && (attempts < maxattempts));
 
         }catch (SocketException e){
             System.out.println("Socket creation failed due to: " + e.getLocalizedMessage());

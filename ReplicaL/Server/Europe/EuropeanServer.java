@@ -52,7 +52,8 @@ public class EuropeanServer {
                 String requestMessage = new String(request.getData(), 0, request.getLength());
 
                 LOGGER.info("Received UDP request message: " + requestMessage);
-                if(!requestQueue.isEmpty()){
+                              if(!requestQueue.isEmpty()){
+                    System.out.println("Request from Queue");
                     socket.receive(request);
                 }
 

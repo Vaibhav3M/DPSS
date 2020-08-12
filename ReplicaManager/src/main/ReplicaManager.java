@@ -67,7 +67,6 @@ public class ReplicaManager {
 
                 }
 
-                System.out.println("response sent " + responseString);
                 //LOGGER.info("Sent UDP response message: " + responseString);
                 DatagramPacket reply = new DatagramPacket(responseString.getBytes(), responseString.length(), request.getAddress(), request.getPort());
 
