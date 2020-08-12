@@ -6,7 +6,7 @@ import java.net.*;
 /**
  * The Send udp request message.
  */
-public class SendReceiveUDPMessage {
+public class FIFOUDPMessage {
 
 
     /**

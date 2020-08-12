@@ -1,6 +1,6 @@
 package ReplicaL.Constants;
 
-import ReplicaL.SendUDP.SendReceiveUDPMessage;
+import ReplicaL.SendUDP.FIFOUDPMessage;
 
 public class Constants {
 
@@ -30,9 +30,9 @@ public class Constants {
     public static final String SERVER_NAME_ASIA = "AsiaGameServer";
 
     /* Log storage locations */
-    public static final String SERVER_LOG_DIRECTORY = "./src/Logs/Server/";
-    public static final String PLAYER_LOG_DIRECTORY = "./src/Logs/Player/";
-    public static final String ADMIN_LOG_DIRECTORY = "./src/Logs/Admin/";
+    public static final String SERVER_LOG_DIRECTORY = "./Logs/Server/";
+    public static final String PLAYER_LOG_DIRECTORY = "./Logs/Player/";
+    public static final String ADMIN_LOG_DIRECTORY = "./Logs/Admin/";
 
     public static int getServerPortFromIP(int ip){
 
@@ -109,14 +109,14 @@ public class Constants {
         //LOGGER.info("Created UDP request - Get player status from port " + serverPort);
         String[] response = {"No response from RM"};
 
-        SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
+        FIFOUDPMessage FIFOUDPMessage = new FIFOUDPMessage();
 
         System.out.println(rmRequestData);
         //create a new thread for UDP request
         Thread UDPThread = new Thread(() ->
         {
             try {
-                response[0] = sendReceiveUDPMessage.getUDPResponse("1:"+rmRequestData, 4000, requestServerPort);
+                response[0] = FIFOUDPMessage.getUDPResponse("1:"+rmRequestData, 4000, requestServerPort);
                 System.out.println(response[0]);
 
             } catch (Exception e) {

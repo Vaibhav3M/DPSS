@@ -3,7 +3,7 @@ package Replica1.main.Server.America;
 import GameServer_CORBA.GameServerPOA;
 import Replica1.main.Constants.Constants;
 import Replica1.main.Model.Player;
-import Replica1.main.SendUDP.SendReceiveUDPMessage;
+import Replica1.main.SendUDP.FIFOUDPMessage;
 import org.omg.CORBA.ORB;
 
 import java.util.ArrayList;
@@ -396,13 +396,13 @@ public class R1_AmericanServerImpl extends GameServerPOA {
         LOGGER.info("Created UDP request - Get player status from port " + serverPort);
         String[] response = {"No response from " + serverPort};
 
-        SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
+        FIFOUDPMessage FIFOUDPMessage = new FIFOUDPMessage();
 
         //create a new thread for UDP request
         Thread UDPThread = new Thread(() ->
         {
             try {
-                response[0] = sendReceiveUDPMessage.getUDPResponse(action, serverPort, Constants.SERVER_PORT_AMERICA);
+                response[0] = FIFOUDPMessage.getUDPResponse(action, serverPort, Constants.SERVER_PORT_AMERICA);
 
             } catch (Exception e) {
                 System.out.println("Exception at getPlayerStatus: " + e.getLocalizedMessage());
@@ -429,10 +429,10 @@ public class R1_AmericanServerImpl extends GameServerPOA {
      * @return  username status
      */
     private boolean checkUserName(String userName) {
-        SendReceiveUDPMessage sendReceiveUDPMessage = new SendReceiveUDPMessage();
+        FIFOUDPMessage FIFOUDPMessage = new FIFOUDPMessage();
 
-        String check_asia = sendReceiveUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_AMERICA);
-        String check_europe = sendReceiveUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_EUROPE, Constants.SERVER_PORT_AMERICA);
+        String check_asia = FIFOUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_ASIA, Constants.SERVER_PORT_AMERICA);
+        String check_europe = FIFOUDPMessage.getUDPResponse("3:" + userName, Constants.SERVER_PORT_EUROPE, Constants.SERVER_PORT_AMERICA);
 
         return !check_asia.equalsIgnoreCase("User not found") || !check_europe.equalsIgnoreCase("User not found");
     }
