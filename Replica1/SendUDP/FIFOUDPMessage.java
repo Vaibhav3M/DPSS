@@ -12,6 +12,7 @@ public class FIFOUDPMessage {
 
     private int maxattempts = 2;
     private int timeout = 1500;
+    private boolean reponseStatus = true;
 
 
     public void setTimeout(int timeout) {
@@ -40,7 +41,6 @@ public class FIFOUDPMessage {
             datagramSocket = new DatagramSocket();
 
             int attempts = 0;
-            datagramSocket.setSoTimeout(timeout);
 
             byte[] message = (sender_PORT_Address+":"+actionMessage).getBytes();
             InetAddress hostAddress = InetAddress.getByName("localhost");
@@ -52,16 +52,16 @@ public class FIFOUDPMessage {
 
             DatagramPacket serverResponse = new DatagramPacket(buffer,buffer.length);
 
-         //  do {
+           do {
                try {
                    datagramSocket.receive(serverResponse);
 
                    response = new String(serverResponse.getData(), 0, serverResponse.getLength());
                } catch (InterruptedIOException e) {
                    attempts += 1;
-                   System.out.println("Attempts " + attempts);
+                   //System.out.println("Attempts " + attempts);
                }
-          // }while(!response.split(" ")[0].equals("No")  && (attempts < maxattempts));
+           }while(reponseStatus  || (attempts < maxattempts));
 
         }catch (SocketException e){
             System.out.println("Socket creation failed due to: " + e.getLocalizedMessage());

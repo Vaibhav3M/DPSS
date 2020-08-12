@@ -1,6 +1,7 @@
 package Replica2.SendUDP;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.*;
 
 /**
@@ -8,6 +9,17 @@ import java.net.*;
  */
 public class FIFOUDPMessage {
 
+    private int maxattempts = 2;
+    private int timeout = 1500;
+    private boolean reponseStatus = true;
+
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+    public void setMaxTries(int maxAttempts) {
+        this.maxattempts = maxAttempts;
+    }
 
     /**
      * Gets udp response.
@@ -23,6 +35,7 @@ public class FIFOUDPMessage {
         String response = "No response from " + client_PORT_Address;
 
         try{
+            int attempts = 0;
             datagramSocket = new DatagramSocket();
 
             byte[] message = (sender_PORT_Address+":"+actionMessage).getBytes();
@@ -34,7 +47,14 @@ public class FIFOUDPMessage {
             byte[] buffer = new byte[1000];
 
             DatagramPacket serverResponse = new DatagramPacket(buffer,buffer.length);
-            datagramSocket.receive(serverResponse);
+            do {
+
+                try {
+                    datagramSocket.receive(serverResponse);
+                } catch (InterruptedIOException e) {
+                    attempts += 1;
+                }
+            }while(reponseStatus  || (attempts < maxattempts));
 
             response = new String(serverResponse.getData(),0,serverResponse.getLength());
 
