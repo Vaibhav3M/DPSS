@@ -12,7 +12,7 @@ public class FIFOUDPMessage {
 
     private int maxattempts = 2;
     private int timeout = 1500;
-    private boolean reponseStatus = true;
+    private boolean reponseStatus = false;
 
 
     public void setTimeout(int timeout) {

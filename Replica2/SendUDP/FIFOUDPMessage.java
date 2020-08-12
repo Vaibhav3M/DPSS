@@ -11,7 +11,7 @@ public class FIFOUDPMessage {
 
     private int maxattempts = 2;
     private int timeout = 1500;
-    private boolean reponseStatus = true;
+    private boolean reponseStatus = false;
 
 
     public void setTimeout(int timeout) {
@@ -54,7 +54,7 @@ public class FIFOUDPMessage {
                 } catch (InterruptedIOException e) {
                     attempts += 1;
                 }
-            }while(reponseStatus  || (attempts < maxattempts));
+            }while(reponseStatus  && (attempts < maxattempts));
 
             response = new String(serverResponse.getData(),0,serverResponse.getLength());
 

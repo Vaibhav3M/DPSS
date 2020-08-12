@@ -28,7 +28,7 @@ public class R1_AmericanServer {
 
     // to manage log files
     static FileHandler fileHandler = null;
-    private static DatagramSocket socket;
+    private static DatagramSocket socket = null;
 
     /**
      * Recieve - Setup UDP server to recieve requests.

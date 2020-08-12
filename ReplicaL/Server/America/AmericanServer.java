@@ -16,17 +16,20 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 public class AmericanServer {
 
-    public static boolean isLeader = false;
+
+    private static ConcurrentLinkedQueue<String> requestQueue = new ConcurrentLinkedQueue<>();
 
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     // to manage log files
     static FileHandler fileHandler = null;
+    private static DatagramSocket socket = null;
 
     /**
      * Recieve - Setup UDP server to recieve requests.
@@ -51,6 +54,9 @@ public class AmericanServer {
 
                 LOGGER.info("Received UDP request message: " + requestMessage);
 
+                if(!requestQueue.isEmpty()){
+                    socket.receive(request);
+                }
                 String[] data = requestMessage.split(":");
                 String request_IP = data[0];
 
