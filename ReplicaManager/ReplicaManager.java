@@ -1,4 +1,4 @@
-package ReplicaManager.src.main;
+package ReplicaManager;
 
 import ReplicaL.Constants.Constants;
 import ReplicaL.Server.America.AmericanServer;
@@ -52,17 +52,14 @@ public class ReplicaManager {
 
                 String[] data = requestMessage.split(":");
                 String request_IP = data[0];
-                System.out.println(requestMessage);
+
                 switch (data[1].trim()) {
 
                     case "1":
                         responseString = wrongAnswerNotification(data[2], args);
                         break;
-                    case "2":
-                        responseString = "";
-                        break;
-                    case "3":
-                        responseString = "";
+                    default:
+                        responseString = "Error occured";
                         break;
 
                 }
@@ -178,7 +175,7 @@ public class ReplicaManager {
            // interruptThreads(R1);
             // Start new Replica 1 as leader;
             startReplica1(args);
-            response = "Replica1 restarted";
+            response = "Replica1 has been restarted";
         }
 
         if (errorCount_R2 >= 3) {
@@ -186,7 +183,7 @@ public class ReplicaManager {
             interruptThreads(R2);
             // Start new  Replica 2;
             startReplica2(args);
-            response = "Replica2 restarted";
+            response = "Replica2 has been restarted";
 
         }
 
@@ -195,7 +192,7 @@ public class ReplicaManager {
             interruptThreads(R3);
             // Start new Replica 3;
             startReplica3(args);
-            response = "Replica3 restarted";
+            response = "Replica3 has been restarted";
 
         }
 
@@ -361,7 +358,7 @@ public class ReplicaManager {
             interruptThreads(R1);
             interruptThreads(R2);
             interruptThreads(R3);
-            System.out.println("Servers stopped");
+            System.out.println("All the Servers have been stopped");
 
         }
     }

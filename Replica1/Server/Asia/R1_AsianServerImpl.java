@@ -98,7 +98,7 @@ public class R1_AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
                         result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_ASIA);
-            System.out.println(result + " - " + response1 + " - " + response2);
+            System.out.println("L: " + result + " | R2: " + response1 + " | R3:  " + response2);
         }
 
         return result;
@@ -159,7 +159,7 @@ public class R1_AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
                         result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_ASIA);
-            System.out.println(result + " - " + response1 + " - " + response2);
+            System.out.println("L: " + result + " | R2: " + response1 + " | R3:  " + response2);
         }
 
         return result;
@@ -223,7 +223,7 @@ public class R1_AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
                         result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_ASIA);
-            System.out.println(result + " - " + response1 + " - " + response2);
+            System.out.println("L: " + result + " | R2: " + response1 + " | R3:  " + response2);
         }
 
         return result;
@@ -326,7 +326,7 @@ public class R1_AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
                         result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_ASIA);
-            System.out.println(result + " - " + response1 + " - " + response2);
+            System.out.println("L: " + result + " | R2: " + response1 + " | R3:  " + response2);
         }
 
         return result;
@@ -380,7 +380,7 @@ public class R1_AsianServerImpl extends GameServerPOA {
 
         if (isLeader) {
             result = Constants.calculateEndResult(result, response1, response2, Constants.SERVER_PORT_ASIA);
-            System.out.println(result + " - " + response1 + " - " + response2);
+            System.out.println("L: " + result + " | R2: " + response1 + " | R3:  " + response2);
         }
 
         return result;
