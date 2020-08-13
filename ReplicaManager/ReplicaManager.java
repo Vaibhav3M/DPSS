@@ -10,6 +10,9 @@ import Replica1.Server.Europe.R1_EuropeanServer;
 import Replica2.Server.America.R2_AmericanServer;
 import Replica2.Server.Asia.R2_AsianServer;
 import Replica2.Server.Europe.R2_EuropeanServer;
+import Replica_Faulty.Server.America.F_AmericanServer;
+import Replica_Faulty.Server.Asia.F_AsianServer;
+import Replica_Faulty.Server.Europe.F_EuropeanServer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -17,6 +20,11 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 
 public class ReplicaManager {
+
+    private static boolean testByzantine = true;
+
+    //1 is R1, 2 is R2, 3 is R3
+    private static int leader_id = 1;
 
     private static final int REPLICA_SERVER_PORT = 4000;
 
@@ -28,8 +36,6 @@ public class ReplicaManager {
     private static Thread[] R2 = new Thread[3];
     private static Thread[] R3 = new Thread[3];
 
-    //1 is R1, 2 is R2, 3 is R3
-    private static int leader_id = 1;
 
 
     public static void recieve(String[] args) {
@@ -123,9 +129,15 @@ public class ReplicaManager {
                 break;
         }
 
-        R1 = startReplica1(args);
-        R2 = startReplica2(args);
-        R3 = startReplica3(args);
+        if(testByzantine) {
+            R1 = startReplica1(args);
+            R2 = startReplicaFaulty(args);
+            R3 = startReplica3(args);
+        }else{
+            R1 = startReplica1(args);
+            R2 = startReplica2(args);
+            R3 = startReplica3(args);
+        }
 
         ShutDownTask shutDownTask = new ShutDownTask();
         Runtime.getRuntime().addShutdownHook(shutDownTask);
@@ -338,6 +350,54 @@ public class ReplicaManager {
         {
             try {
                 R2_EuropeanServer.main(args);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Exception at main" + e.getLocalizedMessage());
+            }
+        });
+
+        server_europe.setName("thread_R2_Europe_server");
+        server_europe.start();
+
+        return new Thread[]{server_america, server_asia, server_europe};
+    }
+
+    private static Thread[] startReplicaFaulty(String[] args) {
+
+
+        Thread server_america = new Thread(() ->
+        {
+            try {
+                F_AmericanServer.main(args);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Exception at main" + e.getLocalizedMessage());
+            }
+        });
+
+        server_america.setName("thread_R2_America_server");
+        server_america.start();
+
+        Thread server_asia = new Thread(() ->
+        {
+            try {
+                F_AsianServer.main(args);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Exception at main" + e.getLocalizedMessage());
+            }
+        });
+
+        server_asia.setName("thread_R2_Asia_server");
+        server_asia.start();
+
+        Thread server_europe = new Thread(() ->
+        {
+            try {
+                F_EuropeanServer.main(args);
 
             } catch (Exception e) {
                 e.printStackTrace();
