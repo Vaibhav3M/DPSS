@@ -36,6 +36,8 @@ public class ReplicaManager {
     private static Thread[] R2 = new Thread[3];
     private static Thread[] R3 = new Thread[3];
 
+    private static boolean run = false;
+
 
 
     public static void recieve(String[] args) {
@@ -48,7 +50,11 @@ public class ReplicaManager {
             dataSocket = new DatagramSocket(REPLICA_SERVER_PORT);
             byte[] buffer = new byte[1000];
             //LOGGER.info("Server started..!!!");
-            System.out.println("RM Started at " + REPLICA_SERVER_PORT);
+            String launchMessage = "RM launched at : - " + REPLICA_SERVER_PORT;
+
+            if(testByzantine){launchMessage = launchMessage + " with Byzantine error";}
+
+            System.out.println(launchMessage);
             while (true) {
                 DatagramPacket request = new DatagramPacket(buffer, buffer.length);
                 dataSocket.receive(request);
@@ -184,7 +190,7 @@ public class ReplicaManager {
         // Check counter values
         if (errorCount_R1 >= 3) {
             errorCount_R1 = 0;
-           // interruptThreads(R1);
+            interruptThreads(R1);
             // Start new Replica 1 as leader;
             startReplica1(args);
             response = "Replica1 has been restarted";
@@ -194,7 +200,8 @@ public class ReplicaManager {
             errorCount_R2 = 0;
             interruptThreads(R2);
             // Start new  Replica 2;
-            startReplica2(args);
+            run = true;
+            startReplicaFaulty(args);
             response = "Replica2 has been restarted";
 
         }
@@ -281,7 +288,7 @@ public class ReplicaManager {
             }
         });
 
-        server_america.setName("thread_R1_America_server");
+       // server_america.setName("thread_R1_America_server");
         server_america.start();
 
         Thread server_asia = new Thread(() ->
@@ -295,7 +302,7 @@ public class ReplicaManager {
             }
         });
 
-        server_asia.setName("thread_R1_Asia_server");
+      //  server_asia.setName("thread_R1_Asia_server");
         server_asia.start();
 
         Thread server_europe = new Thread(() ->
@@ -308,7 +315,7 @@ public class ReplicaManager {
             }
         });
 
-        server_europe.setName("thread_R1_Europe_server");
+       // server_europe.setName("thread_R1_Europe_server");
         server_europe.start();
 
         return new Thread[]{server_america, server_asia, server_europe};
@@ -369,6 +376,7 @@ public class ReplicaManager {
         Thread server_america = new Thread(() ->
         {
             try {
+                if(run) {F_AmericanServer.run = true; }
                 F_AmericanServer.main(args);
 
             } catch (Exception e) {
@@ -377,7 +385,7 @@ public class ReplicaManager {
             }
         });
 
-        server_america.setName("thread_R2_America_server");
+      //  server_america.setName("thread_R2_America_server");
         server_america.start();
 
         Thread server_asia = new Thread(() ->
@@ -391,7 +399,7 @@ public class ReplicaManager {
             }
         });
 
-        server_asia.setName("thread_R2_Asia_server");
+      //  server_asia.setName("thread_R2_Asia_server");
         server_asia.start();
 
         Thread server_europe = new Thread(() ->
@@ -405,7 +413,7 @@ public class ReplicaManager {
             }
         });
 
-        server_europe.setName("thread_R2_Europe_server");
+      //  server_europe.setName("thread_R2_Europe_server");
         server_europe.start();
 
         return new Thread[]{server_america, server_asia, server_europe};

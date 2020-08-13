@@ -153,7 +153,7 @@ public class F_EuropeanServer {
             // bind the Object Reference in Naming
             NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_EUROPE);
             ncRef.rebind(path, href);
-            System.out.println("EuropeanServer ready and waiting at - " + Constants.SERVER_PORT_EUROPE);
+            System.out.println("R2_EuropeanServer launched at port : - " + Constants.SERVER_PORT_EUROPE);
             // wait for invocations from clients
             orb.run();
         } catch (Exception e) {

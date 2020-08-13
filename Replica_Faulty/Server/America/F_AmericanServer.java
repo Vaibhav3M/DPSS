@@ -30,6 +30,8 @@ public class F_AmericanServer {
     static FileHandler fileHandler = null;
     private static DatagramSocket socket = null;
 
+    public static boolean run = false;
+
     /**
      * Recieve - Setup UDP server to recieve requests.
      *
@@ -121,7 +123,7 @@ public class F_AmericanServer {
 
     public static void main(String args[]) {
 
-        F_AmericanServerImpl americanServer = new F_AmericanServerImpl(LOGGER);
+        F_AmericanServerImpl americanServer = new F_AmericanServerImpl(LOGGER, run);
 
         Thread server_america = new Thread(() ->
         {
@@ -163,7 +165,7 @@ public class F_AmericanServer {
             // bind the Object Reference in Naming
             NameComponent path[] = ncRef.to_name(Constants.SERVER_NAME_AMERICA);
             ncRef.rebind(path, href);
-            System.out.println("AmericanServer ready and waiting at - " + Constants.SERVER_PORT_AMERICA);
+            System.out.println("R2_AmericanServer launched at port : - " + Constants.SERVER_PORT_AMERICA);
             // wait for invocations from clients
             orb.run();
         } catch (Exception e) {

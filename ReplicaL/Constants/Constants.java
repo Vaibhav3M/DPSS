@@ -120,7 +120,7 @@ public class Constants {
 
         FIFOUDPMessage FIFOUDPMessage = new FIFOUDPMessage();
 
-        System.out.println(rmRequestData);
+        //System.out.println(rmRequestData);
         //create a new thread for UDP request
         Thread UDPThread = new Thread(() ->
         {

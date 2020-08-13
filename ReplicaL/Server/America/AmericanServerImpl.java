@@ -176,7 +176,6 @@ public class AmericanServerImpl extends GameServerPOA {
     public String playerSignOut(String Username, String IPAddress) {
 
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
-
         String result = "User not found";
         String response1 = "";
         String response2 = "";

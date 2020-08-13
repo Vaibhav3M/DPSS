@@ -26,10 +26,13 @@ public class F_AmericanServerImpl extends GameServerPOA {
     //to log activities in a log file
     private static Logger LOGGER;
 
-    protected F_AmericanServerImpl(Logger logger) {
+    private static boolean run = false;
+
+    protected F_AmericanServerImpl(Logger logger, boolean run1) {
         super();
+        run = run1;
         LOGGER = logger;
-        addDummyData();
+        addDummyData(run);
     }
 
     // set ORB value
@@ -43,7 +46,7 @@ public class F_AmericanServerImpl extends GameServerPOA {
         String response2 = "";
 
         if (isLeader) {
-            String action = "1:" + FirstName + ":" + LastName + ":" + Math.round(Age) + ":" + Username + ":" + Password;
+            String action = "1:" + FirstName  + ":" + LastName + ":" + Math.round(Age) + ":" + Username  + Password;
             response1 = generateUDPResponse(Constants.L_SERVER_PORT_AMERICA, action);
             response2 = generateUDPResponse(Constants.R2_SERVER_PORT_AMERICA, action);
         }
@@ -51,7 +54,7 @@ public class F_AmericanServerImpl extends GameServerPOA {
         boolean isFromServerIP = (Integer.parseInt(IPAddress) == Constants.SERVER_IP_AMERICA);
 
         //create player object
-        Player player = new Player(FirstName, LastName, Math.round(Age) , Username, Password, String.valueOf(Constants.SERVER_IP_AMERICA), false);
+        Player player = new Player(FirstName, LastName, Math.round(Age) , Username+"Fault", Password, String.valueOf(Constants.SERVER_IP_AMERICA), false);
 
         LOGGER.info("Received   request - Create Player - " + player.toString());
 
@@ -437,7 +440,8 @@ public class F_AmericanServerImpl extends GameServerPOA {
         return !check_asia.equalsIgnoreCase("User not found") || !check_europe.equalsIgnoreCase("User not found");
     }
 
-    private void addDummyData() {
+    private void addDummyData(boolean run) {
+        if (run) {addDummyDataHelper(new Player("Test123", "Test123", 25, "test123", "test123", String.valueOf(Constants.SERVER_IP_AMERICA), false));}
         addDummyDataHelper(new Player("Test", "Test", 21, "Test_America1", "test123", String.valueOf(Constants.SERVER_IP_AMERICA), false));
         addDummyDataHelper(new Player("Alex", "Alex", 21, "Alex1212", "alex123", String.valueOf(Constants.SERVER_IP_AMERICA), true));
         addDummyDataHelper(new Player("Alex", "Alex", 21, "qwqwqw", "qwqwqw", String.valueOf(Constants.SERVER_IP_AMERICA), true));
