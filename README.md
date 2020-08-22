@@ -67,7 +67,8 @@ The ports can be changed in Constants.java file.
 
 The below diagram describes the major components of the system. The client(player and admin), the front end, the replicas, the replica manager, and the reliable FIFO UDP.
 
-<img src="https://github.com/Vaibhav3M/AirBnB_Analytics/blob/master/Analysis/Visualizations/SHAP.png" height="500"/> 
+
+<img src="https://github.com/Vaibhav3M/DPSS/blob/master/architecture.png" height="600"/> 
 
 
 
@@ -83,7 +84,7 @@ CORBA is used to a design specification for an Object Request Broker (ORB). This
 
 ### 2. Reliable FIFO UDP
 The UDP is used for the communications between FE, leader, RM and other replicas. This communication is made reliable and FIFO in order to avoid message loss and guarantee correctness.
-Please refer to page above for in-depth explanation.
+Please refer to project report for in-depth explanation.
  
 
 ### 3.	Multi-threading
